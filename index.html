@@ -448,7 +448,7 @@
     padding: 28px 32px;
   }
   .pie-wrap .pie-box {
-    background: var(--dark2);
+    background: #FFFFFF;
     padding: 28px 32px;
   }
   .pie-wrap .chart-box-title {
@@ -457,7 +457,7 @@
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--grey);
+    color: #333333;
     margin-bottom: 16px;
   }
 
@@ -2236,7 +2236,7 @@ function initPieChart() {
         legend: {
           position: 'right',
           labels: {
-            color: '#FFFFFF',
+            color: '#333333',
             font: { family: 'Barlow', size: 12, weight: '500' },
             padding: 14,
             usePointStyle: true,
@@ -2249,6 +2249,7 @@ function initPieChart() {
                 fillStyle: data.datasets[0].backgroundColor[i],
                 strokeStyle: 'transparent',
                 pointStyle: 'circle',
+                fontColor: '#333333',
                 index: i
               }));
             }
