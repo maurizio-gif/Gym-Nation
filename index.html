@@ -1861,6 +1861,9 @@ if (s7el) costObs.observe(s7el);
    Each bar group animates left to right with delay
 ============================================= */
 
+// Set Chart.js global text color to white for dark background
+Chart.defaults.color = '#FFFFFF';
+
 // Custom plugin: stagger bar animation per dataset index
 const staggerPlugin = {
   id: 'staggerGrow',
