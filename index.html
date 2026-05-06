@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Athlon × Orange — Customer Journey Digitale</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --orange: #FF6B1A;
+    --orange-light: #FF8C4A;
+    --orange-dim: rgba(255,107,26,0.15);
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --white: #FFFFFF;
+    --grey: #888888;
+    --grey-light: #CCCCCC;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--orange);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: normal;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 40px; height: 40px;
+    border: 1px solid rgba(255,107,26,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--orange), var(--orange-light));
+    z-index: 1000;
+    transition: width 0.1s;
+    width: 0%;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, transparent 100%);
+  }
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    color: var(--white);
+  }
+  .nav-logo span { color: var(--orange); }
+  .nav-dots {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--grey);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .nav-dot.active { background: var(--orange); transform: scale(1.5); }
+
+  /* SECTIONS */
+  section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  section > * { position: relative; z-index: 1; }
+
+  /* SLIDE 1 — HERO */
+  #s1 {
+    background: var(--black);
+    justify-content: flex-end;
+    padding-bottom: 100px;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(255,107,26,0.12) 0%, transparent 70%);
+  }
+  .hero-line {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    animation: lineSlide 3s ease-in-out infinite;
+    opacity: 0.5;
+  }
+  @keyframes lineSlide {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+  .hero-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(52px, 8vw, 96px);
+    line-height: 0.92;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .hero-title em {
+    font-style: normal;
+    color: var(--orange);
+    display: block;
+  }
+  .hero-sub {
+    margin-top: 32px;
+    font-size: 17px;
+    font-weight: 400;
+    color: #CCCCCC;
+    max-width: 480px;
+    line-height: 1.65;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+  .hero-scroll {
+    margin-top: 64px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--grey);
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+  .hero-scroll-line {
+    width: 48px; height: 1px;
+    background: var(--orange);
+    animation: expandLine 1.5s 1.5s ease-out forwards;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+  @keyframes expandLine {
+    to { transform: scaleX(1); }
+  }
+  .hero-number {
+    position: absolute;
+    right: 48px;
+    bottom: 100px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    user-select: none;
+  }
+
+  /* SECTION HEADER */
+  .s-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .s-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5vw, 64px);
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+  .s-title em {
+    font-style: normal;
+    color: var(--orange);
+  }
+  .s-sub {
+    font-size: 16px;
+    font-weight: 400;
+    color: #BBBBBB;
+    max-width: 560px;
+    line-height: 1.65;
+    margin-bottom: 56px;
+  }
+
+  /* SLIDE 2 — LEADS */
+  #s2 { background: var(--dark); }
+  .leads-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    margin-bottom: 3px;
+  }
+  .lead-month {
+    background: var(--dark2);
+    padding: 36px 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .lead-month:hover { background: var(--dark3); }
+  .lead-month::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .lead-month:hover::after { transform: scaleX(1); }
+  .lead-m-label {
+    font-family: 'Barlow Condensed', sans-serif !important;
+    font-size: 52px !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.01em !important;
+    color: var(--orange) !important;
+    text-transform: uppercase !important;
+    margin-bottom: 16px !important;
+    line-height: 1 !important;
+    display: block !important;
+  }
+  .lead-m-number {
+    font-family: 'Barlow Condensed', sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 80px !important;
+    line-height: 1 !important;
+    color: var(--white) !important;
+    display: block !important;
+  }
+  .lead-m-number span {
+    font-family: 'Barlow', sans-serif !important;
+    font-size: 18px !important;
+    color: #AAAAAA !important;
+    font-weight: 500 !important;
+    margin-left: 8px !important;
+    letter-spacing: 0.02em !important;
+  }
+  .lead-channels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    margin-top: 0;
+  }
+  .channel-card {
+    background: var(--dark2);
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .channel-pct {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 64px;
+    color: var(--orange);
+    line-height: 1;
+    min-width: 110px;
+  }
+  .channel-label {
+    font-size: 14px;
+    color: #BBBBBB;
+    line-height: 1.5;
+  }
+  .channel-label strong {
+    display: block;
+    font-size: 17px;
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: 0.01em;
+  }
+
+  /* SLIDE 3 — MODELLO */
+  #s3 { background: var(--black); padding-top: 100px; }
+  .model-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+    margin-top: 8px;
+  }
+  .model-card {
+    background: var(--dark2);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .model-card:hover { background: var(--dark3); transform: translateY(-4px); }
+  .model-card.featured {
+    background: linear-gradient(135deg, var(--dark3), rgba(255,107,26,0.08));
+    border: 1px solid rgba(255,107,26,0.2);
+  }
+  .model-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 72px;
+    color: rgba(255,255,255,0.05);
+    line-height: 1;
+    position: absolute;
+    right: 16px;
+    top: 12px;
+  }
+  .model-icon {
+    width: 36px; height: 36px;
+    background: var(--orange);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .model-card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--orange);
+    margin-bottom: 12px;
+  }
+  .model-card-text {
+    font-size: 14px;
+    color: #BBBBBB;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+  .model-card-text strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* SLIDE 4 — ABBONAMENTI */
+  #s4 { background: var(--dark); }
+  .charts-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+  }
+  .chart-box {
+    background: var(--dark2);
+    padding: 32px;
+    border-radius: 0;
+  }
+  .chart-box-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 24px;
+  }
+  .chart-container { height: 240px; position: relative; }
+  .stat-highlight {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--orange);
+    padding: 28px 40px;
+  }
+  .stat-h-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 72px;
+    color: var(--white);
+    line-height: 1;
+    margin-right: 20px;
+  }
+  .stat-h-text {
+    font-size: 15px;
+    color: rgba(255,255,255,0.85);
+    max-width: 340px;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .stat-h-text strong { color: var(--white); font-weight: 700; }
+
+  /* SLIDE 5 — RETENTION */
+  #s5 { background: var(--black); }
+  .retention-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+  }
+  .ret-block {
+    background: var(--dark2);
+    padding: 36px 32px;
+  }
+  .ret-block-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--orange);
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--dark3);
+  }
+  .ret-table { width: 100%; }
+  .ret-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+  }
+  .ret-row:last-child { border-bottom: none; }
+  .ret-row-label { color: #AAAAAA; font-size: 13px; }
+  .ret-row-val { font-weight: 700; color: var(--white); text-align: right; font-size: 14px; }
+  .ret-row-pct {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    color: var(--orange);
+    min-width: 44px;
+    text-align: right;
+  }
+  .ret-total {
+    margin-top: 16px;
+    padding: 14px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,107,26,0.3);
+  }
+  .ret-total-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #CCCCCC;
+  }
+  .ret-total-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 30px;
+    color: var(--orange);
+  }
+
+  /* SLIDE 6 — RECUPERO CREDITI */
+  #s6 { background: var(--dark); }
+  .debtor-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .debtor-stages {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .debtor-stage {
+    background: var(--dark2);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .debtor-stage:hover { background: var(--dark3); }
+  .debtor-stage-bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--orange);
+    opacity: 0.15;
+    transition: width 1s ease-out;
+    width: 0;
+  }
+  .debtor-stage-n {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 36px;
+    color: var(--white);
+    min-width: 48px;
+    line-height: 1;
+  }
+  .debtor-stage-info { flex: 1; }
+  .debtor-stage-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+  .debtor-stage-sub {
+    font-size: 12px;
+    color: #AAAAAA;
+    letter-spacing: 0.04em;
+  }
+  .debtor-stage.recovery {
+    background: rgba(255,107,26,0.1);
+    border: 1px solid rgba(255,107,26,0.3);
+  }
+  .debtor-stage.recovery .debtor-stage-n { color: var(--orange); }
+  .debtor-kpis {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .debtor-kpi {
+    background: var(--dark2);
+    padding: 32px;
+  }
+  .debtor-kpi-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #AAAAAA;
+    margin-bottom: 10px;
+  }
+  .debtor-kpi-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 52px;
+    line-height: 1;
+    color: var(--white);
+  }
+  .debtor-kpi-value.orange { color: var(--orange); }
+  .debtor-kpi-note {
+    font-size: 13px;
+    color: #BBBBBB;
+    margin-top: 10px;
+    line-height: 1.55;
+    font-weight: 400;
+  }
+  .debtor-kpi-note strong { color: var(--orange-light); font-weight: 600; }
+
+  /* SLIDE 7 — COSTI */
+  #s7 { background: var(--black); }
+  .cost-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .cost-left {
+    background: var(--dark2);
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cost-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .cost-kpi {
+    background: var(--dark2);
+    padding: 36px 40px;
+    flex: 1;
+  }
+  .cost-kpi.featured {
+    background: var(--orange);
+  }
+  .cost-kpi.featured .cost-kpi-label { color: rgba(255,255,255,0.7); }
+  .cost-kpi.featured .cost-kpi-value { color: var(--white); }
+  .cost-kpi.featured .cost-kpi-note { color: rgba(255,255,255,0.8); }
+  .cost-kpi-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #AAAAAA;
+    margin-bottom: 8px;
+  }
+  .cost-kpi-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 56px;
+    color: var(--white);
+    line-height: 1;
+  }
+  .cost-kpi-note {
+    font-size: 13px;
+    color: #BBBBBB;
+    margin-top: 10px;
+    line-height: 1.55;
+    font-weight: 400;
+  }
+  .team-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .team-dot {
+    width: 8px; height: 8px;
+    background: var(--orange);
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .team-item-text {
+    font-size: 15px;
+    color: #BBBBBB;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .team-item-text strong { color: var(--white); font-weight: 700; }
+  .cost-big-statement {
+    margin-top: 32px;
+    padding: 28px;
+    border: 1px solid rgba(255,107,26,0.3);
+    background: rgba(255,107,26,0.05);
+  }
+  .cost-big-statement p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+  }
+  .cost-big-statement p em { color: var(--orange); font-style: normal; }
+
+  /* SLIDE 8 — IL PUNTO */
+  #s8 {
+    background: var(--black);
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .punto-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .punto-statement {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(42px, 5vw, 72px);
+    text-transform: uppercase;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+  }
+  .punto-statement em { color: var(--orange); font-style: normal; }
+  .punto-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .punto-list li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    font-size: 16px;
+    color: #CCCCCC;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+  .punto-list li::before {
+    content: '';
+    width: 20px; height: 1px;
+    background: var(--orange);
+    margin-top: 12px;
+    flex-shrink: 0;
+  }
+
+  /* SLIDE 9 — PASSO SUCCESSIVO */
+  #s9 { background: var(--dark); }
+  .next-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    align-items: stretch;
+  }
+  .next-left {
+    background: var(--orange);
+    padding: 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .next-left-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 52px;
+    text-transform: uppercase;
+    line-height: 0.92;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+  .next-left-quote {
+    font-size: 16px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.6;
+    font-weight: 300;
+    font-style: italic;
+    border-left: 3px solid rgba(255,255,255,0.5);
+    padding-left: 20px;
+  }
+  .next-right {
+    background: var(--dark2);
+    padding: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: center;
+  }
+  .next-step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .next-step:last-child { border-bottom: none; padding-bottom: 0; }
+  .next-step-n {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    color: var(--orange);
+    line-height: 1;
+    min-width: 32px;
+  }
+  .next-step-text {
+    font-size: 15px;
+    color: #CCCCCC;
+    line-height: 1.6;
+    font-weight: 400;
+    padding-top: 6px;
+  }
+  .next-step-text strong {
+    display: block;
+    font-size: 16px;
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+
+  /* DIVIDER */
+  .divider {
+    width: 48px; height: 3px;
+    background: var(--orange);
+    margin: 24px 0;
+  }
+
+  /* ORANGE ACCENT LINE */
+  .accent-line {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--orange);
+  }
+
+  /* COUNT UP ANIMATION */
+  .count-up { display: inline-block; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 2px; }
+
+  /* ANIMATED NUMBER GLOW */
+  .lead-m-label { text-shadow: 0 0 40px rgba(255,107,26,0.2); }
+  .stat-h-number { transition: text-shadow 0.5s; text-shadow: 0 0 60px rgba(255,255,255,0.1); }
+  .channel-pct { text-shadow: 0 0 30px rgba(255,107,26,0.25); }
+  .debtor-kpi-value.orange { text-shadow: 0 0 30px rgba(255,107,26,0.4); }
+
+  /* DEBTOR BARS — start at 0, JS animates */
+  .debtor-stage-bar { width: 0 !important; transition: none; }
+
+  /* CHART hover glow */
+  .chart-box { transition: box-shadow 0.3s; }
+  .chart-box:hover { box-shadow: 0 0 40px rgba(255,107,26,0.08); }
+
+  /* STAT HIGHLIGHT pulse after count-up */
+  @keyframes statPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,26,0.35); }
+    50% { box-shadow: 0 0 0 16px rgba(255,107,26,0); }
+  }
+  .stat-highlight { animation: statPulse 3s 3s ease-out infinite; }
+
+  /* RET TOTAL glow */
+  .ret-total-val { text-shadow: 0 0 20px rgba(255,107,26,0.3); }
+
+  /* SLIDE 7 — TEAM CARDS */
+  .team-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    margin-bottom: 0;
+  }
+  .team-card {
+    background: var(--dark2);
+    padding: 40px;
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .team-card:hover { background: var(--dark3); }
+  .team-card-manager {
+    background: linear-gradient(135deg, var(--dark3), rgba(255,107,26,0.06));
+    border: 1px solid rgba(255,107,26,0.2);
+  }
+  .team-card-n {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 80px;
+    color: var(--orange);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 90px;
+  }
+  .team-card-body { flex: 1; }
+  .team-card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .team-card-desc {
+    font-size: 14px;
+    color: #BBBBBB;
+    line-height: 1.65;
+    font-weight: 400;
+    margin-bottom: 14px;
+  }
+  .team-card-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+
+  /* ATHLON NUMBERS GRID */
+  .athlon-numbers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+  }
+  .athlon-num-card {
+    background: var(--dark2);
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .athlon-num-card:hover { background: var(--dark3); transform: translateY(-3px); }
+  .athlon-num-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--dark3);
+    transition: background 0.3s;
+  }
+  .athlon-num-card:hover::before { background: var(--orange); }
+  .athlon-num-featured {
+    background: var(--orange) !important;
+  }
+  .athlon-num-featured:hover { background: var(--orange-light) !important; }
+  .athlon-num-featured::before { background: rgba(255,255,255,0.3) !important; }
+  .athlon-num-featured .athlon-num-label { color: rgba(255,255,255,0.75) !important; }
+  .athlon-num-featured .athlon-num-value { color: var(--white) !important; }
+  .athlon-num-featured .athlon-num-sub { color: rgba(255,255,255,0.7) !important; }
+  .athlon-num-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #999999;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .athlon-num-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 44px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .athlon-num-sub {
+    font-size: 12px;
+    color: #888888;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* RESPONSIVE — team cards */
+  @media (max-width: 768px) {
+    .team-cards { grid-template-columns: 1fr; }
+    .athlon-numbers { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    section { padding: 100px 24px 60px; }
+    nav { padding: 16px 24px; }
+    .model-grid, .charts-wrap, .retention-grid,
+    .cost-layout, .punto-layout, .next-layout,
+    .debtor-layout, .leads-grid, .lead-channels {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<nav>
+  <div class="nav-logo">ATHLON <span>×</span> ORANGE</div>
+  <div class="nav-dots" id="navDots">
+    <div class="nav-dot active" onclick="scrollTo(0,0)"></div>
+    <div class="nav-dot" onclick="document.getElementById('s2').scrollIntoView({behavior:'smooth'})"></div>
+    <div class="nav-dot" onclick="document.getElementById('s3').scrollIntoView({behavior:'smooth'})"></div>
+    <div class="nav-dot" onclick="document.getElementById('s4').scrollIntoView({behavior:'smooth'})"></div>
+    <div class="nav-dot" onclick="document.getElementById('s5').scrollIntoView({behavior:'smooth'})"></div>
+    <div class="nav-dot" onclick="document.getElementById('s6').scrollIntoView({behavior:'smooth'})"></div>
+    <div class="nav-dot" onclick="document.getElementById('s7').scrollIntoView({behavior:'smooth'})"></div>
+    <div class="nav-dot" onclick="document.getElementById('s8').scrollIntoView({behavior:'smooth'})"></div>
+    <div class="nav-dot" onclick="document.getElementById('s9').scrollIntoView({behavior:'smooth'})"></div>
+  </div>
+</nav>
+
+<!-- SLIDE 1 — HERO -->
+<section id="s1">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-number">01</div>
+  <div class="hero-tag">Customer Journey Digitale — Caso Studio</div>
+  <h1 class="hero-title">
+    Come funziona<br>
+    <em>un sistema</em><br>
+    che scala.
+  </h1>
+  <p class="hero-sub">Un modello costruito su dati reali. Cosa cambia quando lead management, iscrizione, pagamenti e retention sono un sistema unico e connesso.</p>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    Scorri per esplorare
+  </div>
+</section>
+
+<!-- SLIDE 2 — LEADS -->
+<section id="s2">
+  <div class="s-label reveal">01 — Il volume che arriva</div>
+  <h2 class="s-title reveal reveal-delay-1">~570 persone al mese.<br><em>Tutte tracciate.</em></h2>
+  <p class="s-sub reveal reveal-delay-2">Lead unici per email — Gen/Apr 2026. Ogni richiesta tracciata per fonte, data e profilo.</p>
+
+  <div class="leads-grid reveal reveal-delay-3">
+    <div class="lead-month">
+      <div class="lead-m-label">Gennaio</div>
+      <div class="lead-m-number"><span class="count-up" data-target="666">0</span><span>lead unici</span></div>
+    </div>
+    <div class="lead-month">
+      <div class="lead-m-label">Febbraio</div>
+      <div class="lead-m-number"><span class="count-up" data-target="548">0</span><span>lead unici</span></div>
+    </div>
+    <div class="lead-month">
+      <div class="lead-m-label">Marzo</div>
+      <div class="lead-m-number"><span class="count-up" data-target="569">0</span><span>lead unici</span></div>
+    </div>
+    <div class="lead-month">
+      <div class="lead-m-label">Aprile</div>
+      <div class="lead-m-number"><span class="count-up" data-target="498">0</span><span>lead unici</span></div>
+    </div>
+  </div>
+
+  <div class="lead-channels reveal reveal-delay-4">
+    <div class="channel-card">
+      <div class="channel-pct">91%</div>
+      <div class="channel-label">
+        <strong>Canali Web / Digitali</strong>
+        Sito, WhatsApp, Virtual Tour, Newsletter, Instagram
+      </div>
+    </div>
+    <div class="channel-card">
+      <div class="channel-pct">9%</div>
+      <div class="channel-label">
+        <strong>Fisico — Tour in Sede</strong>
+        Visite dirette al club, accesso spontaneo
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3 — MODELLO -->
+<section id="s3">
+  <div class="s-label reveal">02 — Il modello</div>
+  <h2 class="s-title reveal reveal-delay-1">Dal primo contatto<br><em>all'abbonamento.</em><br>E oltre.</h2>
+  <p class="s-sub reveal reveal-delay-2">6 layer connessi. Se uno manca, il sistema perde valore a cascata.</p>
+
+  <div class="model-grid">
+    <div class="model-card reveal reveal-delay-1">
+      <div class="model-num">1</div>
+      <div class="model-icon">📥</div>
+      <div class="model-card-title">Lead Capture</div>
+      <div class="model-card-text">CRM centralizzato. Ogni richiesta da ogni canale — sito, WhatsApp, tour, referral — entra in un unico sistema con <strong>fonte, data e profilo tracciati in automatico</strong>.</div>
+    </div>
+    <div class="model-card reveal reveal-delay-2">
+      <div class="model-num">2</div>
+      <div class="model-icon">⚡</div>
+      <div class="model-card-title">Nurturing Automatico</div>
+      <div class="model-card-text"><strong>Risposta immediata</strong> via email e WhatsApp. Il prospect può prenotare un appuntamento telefonico. Viene comunque chiamato <strong>entro 24 ore. Sempre.</strong></div>
+    </div>
+    <div class="model-card reveal reveal-delay-3">
+      <div class="model-num">3</div>
+      <div class="model-icon">📊</div>
+      <div class="model-card-title">Dashboard Consulenti</div>
+      <div class="model-card-text">Ogni interazione tracciata con task, esito e nota strutturata. <strong>Scoring automatico della qualità</strong> del contatto. Il club manager supervisiona in tempo reale.</div>
+    </div>
+    <div class="model-card featured reveal reveal-delay-4">
+      <div class="model-num">4</div>
+      <div class="model-icon">🖥️</div>
+      <div class="model-card-title">Iscrizione Digitale</div>
+      <div class="model-card-text">Sistema unico, <strong>100% online</strong>. In sede: totem touchscreen assistiti — non self-service. Il consulente usa il totem come <strong>strumento di vendita</strong>: corsi, orari, tariffe, iscrizione. Zero carta, zero doppi passaggi.</div>
+    </div>
+    <div class="model-card featured reveal reveal-delay-5">
+      <div class="model-num">5</div>
+      <div class="model-icon">💳</div>
+      <div class="model-card-title">Pagamenti Ricorrenti</div>
+      <div class="model-card-text">Addebito automatico su c/c e carta. Retry su insoluti, escalation programmata. Ogni transazione genera <strong>scontrino fiscale digitale</strong> trasmesso istantaneamente all'Agenzia delle Entrate e al sistema di <strong>controllo di gestione interno</strong> per riclassificazione ricavi.</div>
+    </div>
+    <div class="model-card reveal" style="transition-delay:0.6s">
+      <div class="model-num">6</div>
+      <div class="model-icon">🔄</div>
+      <div class="model-card-title">Retention Engine</div>
+      <div class="model-card-text"><strong>Referral automatizzato · Funnel prove · Gestione disdette</strong> con chiamate outbound strutturate · Recupero crediti con escalation progressiva.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4 — ABBONAMENTI -->
+<section id="s4">
+  <div class="s-label reveal">03 — Nuovi abbonamenti</div>
+  <h2 class="s-title reveal reveal-delay-1"><em>544</em> nuovi abbonamenti<br>in 4 mesi.</h2>
+  <p class="s-sub reveal reveal-delay-2">Gen – Apr 2026. Distribuzione per profilo e canale di iscrizione.</p>
+
+  <div class="charts-wrap reveal reveal-delay-3">
+    <div class="chart-box">
+      <div class="chart-box-title">Adulti vs Junior</div>
+      <div class="chart-container">
+        <canvas id="chartAdultiJunior"></canvas>
+      </div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-box-title">Online vs Onsite</div>
+      <div class="chart-container">
+        <canvas id="chartOnlineOnsite"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-highlight reveal reveal-delay-4">
+    <div class="stat-h-number">62%</div>
+    <div class="stat-h-text">
+      <strong>delle iscrizioni completate online — senza intervento del personale.</strong><br>
+      Su 27 club, questo numero moltiplica il valore in modo significativo.
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 — RETENTION -->
+<section id="s5">
+  <div class="s-label reveal">04 — Retention</div>
+  <h2 class="s-title reveal reveal-delay-1">I tre motori.<br><em>Tutti tracciati,<br>tutti automatizzati.</em></h2>
+
+  <div class="retention-grid">
+
+    <div class="ret-block reveal reveal-delay-2">
+      <div class="ret-block-title">Referral Program</div>
+      <div class="ret-table">
+        <div class="ret-row" style="font-size:11px;color:var(--grey);padding-bottom:6px;">
+          <span>Mese</span><span style="text-align:right">Attivati</span><span style="text-align:right">Conv%</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Gennaio</span>
+          <span class="ret-row-val">51</span>
+          <span class="ret-row-pct">39%</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Febbraio</span>
+          <span class="ret-row-val">55</span>
+          <span class="ret-row-pct">53%</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Marzo</span>
+          <span class="ret-row-val">57</span>
+          <span class="ret-row-pct">49%</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Aprile</span>
+          <span class="ret-row-val">39</span>
+          <span class="ret-row-pct">69%</span>
+        </div>
+      </div>
+      <div class="ret-total">
+        <span class="ret-total-label">Totale · 202 referral</span>
+        <span class="ret-total-val">51%</span>
+      </div>
+    </div>
+
+    <div class="ret-block reveal reveal-delay-3">
+      <div class="ret-block-title">Guest Pass</div>
+      <div class="ret-table">
+        <div class="ret-row" style="font-size:11px;color:var(--grey);padding-bottom:6px;">
+          <span>Mese</span><span style="text-align:right">Pass</span><span style="text-align:right">Conv%</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Gennaio</span>
+          <span class="ret-row-val">55</span>
+          <span class="ret-row-pct">29%</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Febbraio</span>
+          <span class="ret-row-val">36</span>
+          <span class="ret-row-pct">31%</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Marzo</span>
+          <span class="ret-row-val">46</span>
+          <span class="ret-row-pct">30%</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Aprile</span>
+          <span class="ret-row-val">25</span>
+          <span class="ret-row-pct">20%</span>
+        </div>
+      </div>
+      <div class="ret-total">
+        <span class="ret-total-label">Totale · 162 pass</span>
+        <span class="ret-total-val">28%</span>
+      </div>
+    </div>
+
+    <div class="ret-block reveal reveal-delay-4">
+      <div class="ret-block-title">Disdette — Funnel Recupero</div>
+      <div class="ret-table">
+        <div class="ret-row" style="font-size:11px;color:var(--grey);padding-bottom:6px;">
+          <span>Mese</span><span style="text-align:right">Disdette</span><span style="text-align:right">—</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Gennaio</span>
+          <span class="ret-row-val">~55</span>
+          <span class="ret-row-pct" style="color:var(--grey)">—</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Febbraio</span>
+          <span class="ret-row-val">~68</span>
+          <span class="ret-row-pct" style="color:var(--grey)">—</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Marzo</span>
+          <span class="ret-row-val">~79</span>
+          <span class="ret-row-pct" style="color:var(--grey)">—</span>
+        </div>
+        <div class="ret-row">
+          <span class="ret-row-label">Aprile</span>
+          <span class="ret-row-val">~59</span>
+          <span class="ret-row-pct" style="color:var(--grey)">—</span>
+        </div>
+      </div>
+      <div class="ret-total">
+        <span class="ret-total-label">Totale disdette</span>
+        <span class="ret-total-val">~261</span>
+      </div>
+      <div style="margin-top:16px;font-size:12px;color:var(--grey);line-height:1.5;">
+        Chiamata outbound entro 24h → task tracciato → escalation club manager
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SLIDE 6 — RECUPERO CREDITI -->
+<section id="s6">
+  <div class="s-label reveal">05 — Recupero crediti</div>
+  <h2 class="s-title reveal reveal-delay-1"><em>22</em> debitori attivi.<br>€9.533 tracciati<br>per stadio.</h2>
+  <p class="s-sub reveal reveal-delay-2">Dati settembre 2025 – maggio 2026. Fatturato cumulativo di periodo: €1.777.269.</p>
+
+  <div class="debtor-layout">
+    <div class="debtor-stages reveal reveal-delay-3">
+      <div class="debtor-stage">
+        <div class="debtor-stage-bar" style="--w:5%"></div>
+        <div class="debtor-stage-n">1</div>
+        <div class="debtor-stage-info">
+          <div class="debtor-stage-label">Da Gestire</div>
+          <div class="debtor-stage-sub">Mai gestiti — nuovi ingressi</div>
+        </div>
+      </div>
+      <div class="debtor-stage">
+        <div class="debtor-stage-bar" style="--w:9%"></div>
+        <div class="debtor-stage-n">2</div>
+        <div class="debtor-stage-info">
+          <div class="debtor-stage-label">1° Mese</div>
+          <div class="debtor-stage-sub">Da 7 a 30 giorni</div>
+        </div>
+      </div>
+      <div class="debtor-stage">
+        <div class="debtor-stage-bar" style="--w:18%"></div>
+        <div class="debtor-stage-n">4</div>
+        <div class="debtor-stage-info">
+          <div class="debtor-stage-label">2° Mese</div>
+          <div class="debtor-stage-sub">Da 30 a 60 giorni</div>
+        </div>
+      </div>
+      <div class="debtor-stage">
+        <div class="debtor-stage-bar" style="--w:9%"></div>
+        <div class="debtor-stage-n">2</div>
+        <div class="debtor-stage-info">
+          <div class="debtor-stage-label">3° Mese</div>
+          <div class="debtor-stage-sub">Da 60 a 90 giorni</div>
+        </div>
+      </div>
+      <div class="debtor-stage">
+        <div class="debtor-stage-bar" style="--w:18%"></div>
+        <div class="debtor-stage-n">4</div>
+        <div class="debtor-stage-info">
+          <div class="debtor-stage-label">Dal 4° Mese</div>
+          <div class="debtor-stage-sub">Oltre 90 giorni</div>
+        </div>
+      </div>
+      <div class="debtor-stage recovery">
+        <div class="debtor-stage-n">10</div>
+        <div class="debtor-stage-info">
+          <div class="debtor-stage-label">In Recupero Crediti Esterno</div>
+          <div class="debtor-stage-sub">Escalation attivata</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="debtor-kpis reveal reveal-delay-4">
+      <div class="debtor-kpi">
+        <div class="debtor-kpi-label">Debitori Attivi Totali</div>
+        <div class="debtor-kpi-value">22</div>
+        <div class="debtor-kpi-note">Su base settembre 2025 – maggio 2026</div>
+      </div>
+      <div class="debtor-kpi" style="background:var(--orange)">
+        <div class="debtor-kpi-label" style="color:rgba(255,255,255,0.7)">Importo da Recuperare</div>
+        <div class="debtor-kpi-value" style="color:var(--white)">€9.533</div>
+        <div class="debtor-kpi-note" style="color:rgba(255,255,255,0.8)">Lo <strong style="color:white">0,54% del fatturato di periodo</strong> — gestito senza ufficio dedicato</div>
+      </div>
+      <div class="debtor-kpi">
+        <div class="debtor-kpi-label">Esposizione vs Fatturato Periodo</div>
+        <div class="debtor-kpi-value orange">0,54%</div>
+        <div class="debtor-kpi-note">€9.533 su €1.777.269 di fatturato (set 2025 – mag 2026). Non è morosità — è processo. Ogni posizione ha uno stadio, una scadenza e un'azione prevista.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7 — COSTI -->
+<section id="s7">
+  <div class="s-label reveal">06 — Il costo di tutto questo</div>
+  <h2 class="s-title reveal reveal-delay-1">5 persone.<br><em>Un sistema intero.</em></h2>
+  <p class="s-sub reveal reveal-delay-2">Il team che fa girare lead management, CRM, iscrizioni, pagamenti, retention e recupero crediti — 16 ore al giorno, 7 giorni su 7.</p>
+
+  <!-- TEAM 4+1 -->
+  <div class="team-cards reveal reveal-delay-3">
+
+    <div class="team-card">
+      <div class="team-card-n">4</div>
+      <div class="team-card-body">
+        <div class="team-card-title">Front / Back Office</div>
+        <div class="team-card-desc">Presidio 6:00–22:00 ogni giorno. Gestione email in entrata, appuntamenti telefonici, chiamate outbound CRM su lead e disdette.</div>
+        <div class="team-card-tag">Turni · 365gg · Sempre presidiato</div>
+      </div>
+    </div>
+
+    <div class="team-card team-card-manager">
+      <div class="team-card-n">+1</div>
+      <div class="team-card-body">
+        <div class="team-card-title">Club Manager</div>
+        <div class="team-card-desc">Supervisione dell'intero team, escalation delle richieste complesse, gestione del personale. Controllo real-time via dashboard senza presidiare ogni chiamata.</div>
+        <div class="team-card-tag">Supervisione · Escalation · Dashboard</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NUMERI ATHLON -->
+  <div class="cost-big-statement reveal reveal-delay-1" style="margin-top:32px;margin-bottom:0;">
+    <p>La profondità di processo che avete visto<br>gira su <em>5 persone.</em><br>Non perché lavorino di più.<br>Perché <em>il sistema lavora al posto loro.</em></p>
+  </div>
+
+  <div class="s-label reveal" style="margin-top:48px;margin-bottom:20px;">I numeri — Athlon Club</div>
+  <div class="athlon-numbers reveal reveal-delay-1">
+
+    <div class="athlon-num-card">
+      <div class="athlon-num-label">Fatturato Mensile</div>
+      <div class="athlon-num-value">€200k</div>
+      <div class="athlon-num-sub">Media mensile · 1 club</div>
+    </div>
+
+    <div class="athlon-num-card athlon-num-featured">
+      <div class="athlon-num-label">Costo Personale Totale / Mese</div>
+      <div class="athlon-num-value">€50–55k</div>
+      <div class="athlon-num-sub">~25% del fatturato lordo</div>
+    </div>
+
+    <div class="athlon-num-card">
+      <div class="athlon-num-label">Di cui — Dipendenti (14)</div>
+      <div class="athlon-num-value">€30k</div>
+      <div class="athlon-num-sub">Contratti a tempo determinato / indeterminato</div>
+    </div>
+
+    <div class="athlon-num-card">
+      <div class="athlon-num-label">Di cui — Collaboratori</div>
+      <div class="athlon-num-value">€20–25k</div>
+      <div class="athlon-num-sub">Tutti sotto 20 ore settimanali</div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SLIDE 8 — IL PUNTO -->
+<section id="s8">
+  <div class="s-label reveal">07 — Il punto</div>
+
+  <div class="punto-layout">
+    <div class="reveal reveal-delay-1">
+      <h2 class="punto-statement">
+        In Italia<br>
+        <em>nessuno</em><br>
+        lo fa ancora<br>
+        su larga scala.
+      </h2>
+      <div class="divider" style="margin-top:40px;"></div>
+      <p style="font-size:14px;color:var(--grey);line-height:1.6;max-width:380px;margin-top:20px;">
+        Non si tratta di replicare Athlon. Ogni rete ha le sue specificità, le sue strutture, il suo personale.<br><br>
+        Si tratta di prendere la <strong style="color:var(--white)">logica</strong> — CRM centralizzato, automazioni condizionali, iscrizione integrata, pagamenti ricorrenti, retention strutturata — e adattarla a una rete di <strong style="color:var(--white)">27 club</strong>.
+      </p>
+    </div>
+    <ul class="punto-list reveal reveal-delay-2">
+      <li>Nel mondo, pochissimi operatori hanno costruito un sistema integrato a questo livello nel settore fitness.</li>
+      <li>In Italia, nessuno lo fa in modo completo e connesso su una rete multi-club.</li>
+      <li>Chi lo costruisce per primo crea un vantaggio competitivo che non si replica facilmente — né in termini di dati, né di processi, né di know-how.</li>
+      <li>Il modello è modulabile e adattabile. Non è un prodotto finito — è una logica operativa che scala.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SLIDE 9 — PASSO SUCCESSIVO -->
+<section id="s9">
+  <div class="s-label reveal">08 — Passo successivo</div>
+  <h2 class="s-title reveal reveal-delay-1" style="margin-bottom:40px;">Cosa servirebbe<br>per capire se e come<br><em>si applica a Orange.</em></h2>
+
+  <div class="next-layout reveal reveal-delay-2">
+    <div class="next-left">
+      <div>
+        <div class="next-left-title">30 giorni.<br>Gap analysis<br>completa.</div>
+      </div>
+      <div class="next-left-quote">
+        "Ho costruito questo su un club.<br>La domanda è: quanto vale replicarlo su 27?"
+      </div>
+    </div>
+    <div class="next-right">
+      <div class="next-step">
+        <div class="next-step-n">01</div>
+        <div class="next-step-text">
+          <strong>Accesso al gestionale</strong>
+          Analisi dei dati di conversione attuali per club e per rete.
+        </div>
+      </div>
+      <div class="next-step">
+        <div class="next-step-n">02</div>
+        <div class="next-step-text">
+          <strong>Stack tecnologico esistente</strong>
+          CRM, sistema pagamenti, processo iscrizione, analytics.
+        </div>
+      </div>
+      <div class="next-step">
+        <div class="next-step-n">03</div>
+        <div class="next-step-text">
+          <strong>3–5 club campione</strong>
+          Mystery tour esteso + analisi dati interni per validare le ipotesi.
+        </div>
+      </div>
+      <div class="next-step">
+        <div class="next-step-n">04</div>
+        <div class="next-step-text">
+          <strong>Output</strong>
+          Gap analysis completa + roadmap prioritizzata con impatto stimato per singolo club e per rete.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* =============================================
+   CURSOR
+============================================= */
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animateCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+/* =============================================
+   PROGRESS BAR
+============================================= */
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const p = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  progressBar.style.width = (p * 100) + '%';
+});
+
+/* =============================================
+   NAV DOTS
+============================================= */
+const sectionIds = ['s1','s2','s3','s4','s5','s6','s7','s8','s9'];
+const dots = document.querySelectorAll('.nav-dot');
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = sectionIds.indexOf(e.target.id);
+      dots.forEach((d,i) => d.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.5 });
+sectionIds.forEach(id => { const el = document.getElementById(id); if(el) navObs.observe(el); });
+
+/* =============================================
+   REVEAL ON SCROLL
+============================================= */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* =============================================
+   UNIVERSAL COUNT-UP ENGINE
+   Handles: integers, decimals, percentages, currency
+   Usage: data-count-to="666"
+          data-count-prefix="€"
+          data-count-suffix="%"
+          data-count-decimals="2"
+          data-count-duration="1600"
+============================================= */
+function easeOutExpo(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+function easeOutBack(t) {
+  const c1 = 1.70158, c3 = c1 + 1;
+  return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+}
+
+function runCountUp(el) {
+  const target    = parseFloat(el.dataset.countTo);
+  const prefix    = el.dataset.countPrefix  || '';
+  const suffix    = el.dataset.countSuffix  || '';
+  const decimals  = parseInt(el.dataset.countDecimals || '0');
+  const duration  = parseInt(el.dataset.countDuration || '1600');
+  const separator = el.dataset.countSep !== 'false';
+  let startTime   = null;
+
+  function format(v) {
+    const fixed = v.toFixed(decimals);
+    if (!separator) return prefix + fixed + suffix;
+    const parts = fixed.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return prefix + parts.join(',') + suffix;
+  }
+
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    const elapsed  = ts - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased    = easeOutExpo(progress);
+    el.textContent = format(eased * target);
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = format(target);
+  }
+  requestAnimationFrame(step);
+}
+
+const countObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      runCountUp(e.target);
+      countObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.4 });
+
+// Legacy count-up (data-target)
+const legacyCountObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const el = e.target;
+      const target = parseInt(el.dataset.target);
+      let start = null;
+      const dur = 1400;
+      const step = ts => {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / dur, 1);
+        el.textContent = Math.floor(easeOutExpo(p) * target).toLocaleString('it-IT');
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = target.toLocaleString('it-IT');
+      };
+      requestAnimationFrame(step);
+      legacyCountObs.unobserve(el);
+    }
+  });
+}, { threshold: 0.4 });
+
+document.querySelectorAll('[data-count-to]').forEach(el => countObs.observe(el));
+document.querySelectorAll('[data-target]').forEach(el => legacyCountObs.observe(el));
+
+/* =============================================
+   RETENTION TABLE ROW COUNTER ANIMATION
+   Animates all .ret-row-val and .ret-row-pct numbers
+============================================= */
+function animateRetentionRows(section) {
+  section.querySelectorAll('.ret-row-val, .ret-row-pct, .ret-total-val').forEach((el, i) => {
+    const raw = el.textContent.trim();
+    const isPct = raw.includes('%');
+    const num = parseFloat(raw.replace('%','').replace('~','').replace(',','.'));
+    if (isNaN(num)) return;
+    el.textContent = isPct ? '0%' : (raw.startsWith('~') ? '~0' : '0');
+    setTimeout(() => {
+      let start = null;
+      const dur = 1200 + i * 80;
+      const step = ts => {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / dur, 1);
+        const v = easeOutExpo(p) * num;
+        if (isPct) el.textContent = Math.floor(v) + '%';
+        else el.textContent = (raw.startsWith('~') ? '~' : '') + Math.floor(v);
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = raw;
+      };
+      requestAnimationFrame(step);
+    }, i * 60);
+  });
+}
+
+const retObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateRetentionRows(e.target);
+      retObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+const s5el = document.getElementById('s5');
+if (s5el) retObs.observe(s5el);
+
+/* =============================================
+   DEBTOR STAGE BARS — grow left to right
+============================================= */
+const stageObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const bars = e.target.querySelectorAll('.debtor-stage-bar');
+      bars.forEach((b, i) => {
+        const w = b.getAttribute('data-w') || b.style.cssText.match(/--w:\s*([\d.]+%)/)?.[1] || '10%';
+        b.style.width = '0%';
+        setTimeout(() => {
+          b.style.transition = 'width 1s cubic-bezier(0.22,1,0.36,1)';
+          b.style.width = w;
+        }, 200 + i * 120);
+      });
+      // Also animate debtor numbers
+      e.target.querySelectorAll('.debtor-stage-n').forEach((el, i) => {
+        const target = parseInt(el.textContent);
+        if (isNaN(target)) return;
+        el.textContent = '0';
+        setTimeout(() => {
+          let start = null;
+          const dur = 800;
+          const step = ts => {
+            if (!start) start = ts;
+            const p = Math.min((ts - start) / dur, 1);
+            el.textContent = Math.ceil(easeOutBack(Math.min(p * 1.1, 1)) * target);
+            if (p < 1) requestAnimationFrame(step);
+            else el.textContent = target;
+          };
+          requestAnimationFrame(step);
+        }, 300 + i * 100);
+      });
+      stageObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+const s6el = document.getElementById('s6');
+if (s6el) stageObs.observe(s6el);
+
+/* =============================================
+   COST KPI COUNT ANIMATION
+============================================= */
+const costObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.cost-kpi-value').forEach((el, i) => {
+        const raw = el.textContent.trim();
+        const num = parseFloat(raw.replace('%',''));
+        if (isNaN(num) || raw.includes(':')) return;
+        const isPct = raw.includes('%');
+        el.textContent = isPct ? '0%' : '0';
+        setTimeout(() => {
+          let start = null;
+          const dur = 1400;
+          const step = ts => {
+            if (!start) start = ts;
+            const p = Math.min((ts - start) / dur, 1);
+            const v = easeOutExpo(p) * num;
+            el.textContent = isPct ? Math.floor(v) + '%' : Math.floor(v);
+            if (p < 1) requestAnimationFrame(step);
+            else el.textContent = raw;
+          };
+          requestAnimationFrame(step);
+        }, i * 200);
+      });
+      costObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+const s7el = document.getElementById('s7');
+if (s7el) costObs.observe(s7el);
+
+/* =============================================
+   CHART.JS — STACKED BAR WITH STAGGER
+   Bars grow from bottom to top
+   Each bar group animates left to right with delay
+============================================= */
+
+// Custom plugin: stagger bar animation per dataset index
+const staggerPlugin = {
+  id: 'staggerGrow',
+  beforeDraw(chart) {
+    // handled via data override on scroll trigger
+  }
+};
+
+function buildChart(id, datasets, triggered) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return null;
+
+  // Start all data at 0
+  const zeroData = datasets.map(ds => ({ ...ds, data: ds.data.map(() => 0) }));
+
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile'],
+      datasets: zeroData
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        duration: 0 // we control animation manually
+      },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#888',
+            font: { family: 'Barlow', size: 12 },
+            padding: 16,
+            usePointStyle: true,
+            pointStyleWidth: 8
+          }
+        },
+        tooltip: {
+          backgroundColor: '#1A1A1A',
+          titleColor: '#fff',
+          bodyColor: '#aaa',
+          borderColor: '#333',
+          borderWidth: 1,
+          padding: 14,
+          titleFont: { family: 'Barlow Condensed', size: 15, weight: '700' },
+          bodyFont: { family: 'Barlow', size: 13 },
+          callbacks: {
+            label: ctx => ' ' + ctx.dataset.label + ': ' + ctx.raw
+          }
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          ticks: { color: '#555', font: { family: 'Barlow', size: 11 } },
+          grid: { color: 'rgba(255,255,255,0.03)' },
+          border: { color: 'rgba(255,255,255,0.06)' }
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          ticks: { color: '#555', font: { family: 'Barlow', size: 11 } },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          border: { color: 'rgba(255,255,255,0.06)' }
+        }
+      }
+    }
+  });
+
+  return { chart, datasets };
+}
+
+function animateChartIn(chartObj) {
+  if (!chartObj || chartObj.animated) return;
+  chartObj.animated = true;
+  const { chart, datasets } = chartObj;
+  const numBars = datasets[0].data.length; // 4 months
+  const numDatasets = datasets.length;
+  const totalDuration = 1800;
+  const barDelay = 180;   // stagger left-to-right per bar group
+  const dsDelay  = 0;     // datasets grow together per column
+
+  // For each bar index (month), animate both datasets together
+  for (let barIdx = 0; barIdx < numBars; barIdx++) {
+    const delay = barIdx * barDelay;
+    const duration = totalDuration - barIdx * 40;
+
+    for (let dsIdx = 0; dsIdx < numDatasets; dsIdx++) {
+      const finalVal = datasets[dsIdx].data[barIdx];
+      const startTime = performance.now() + delay;
+
+      (function(bi, di, fv, st, dur) {
+        function tick(now) {
+          const elapsed = now - st;
+          if (elapsed < 0) { requestAnimationFrame(tick); return; }
+          const p = Math.min(elapsed / dur, 1);
+          const eased = easeOutExpo(p);
+          chart.data.datasets[di].data[bi] = eased * fv;
+          chart.update('none'); // no animation, just redraw
+          if (p < 1) requestAnimationFrame(tick);
+          else chart.data.datasets[di].data[bi] = fv;
+        }
+        requestAnimationFrame(tick);
+      })(barIdx, dsIdx, finalVal, startTime, duration);
+    }
+  }
+}
+
+// Build charts (data at 0, not animated yet)
+const chartAJ = buildChart('chartAdultiJunior', [
+  {
+    label: 'Adulti',
+    data: [104, 124, 119, 81],
+    backgroundColor: '#FF6B1A',
+    hoverBackgroundColor: '#FF8C4A',
+    borderRadius: 2,
+    borderSkipped: false
+  },
+  {
+    label: 'Junior',
+    data: [29, 34, 28, 25],
+    backgroundColor: 'rgba(255,107,26,0.28)',
+    hoverBackgroundColor: 'rgba(255,107,26,0.45)',
+    borderRadius: 2,
+    borderSkipped: false
+  }
+]);
+
+const chartOO = buildChart('chartOnlineOnsite', [
+  {
+    label: 'Online',
+    data: [87, 87, 99, 67],
+    backgroundColor: '#FF6B1A',
+    hoverBackgroundColor: '#FF8C4A',
+    borderRadius: 2,
+    borderSkipped: false
+  },
+  {
+    label: 'Onsite',
+    data: [46, 71, 48, 39],
+    backgroundColor: 'rgba(255,255,255,0.13)',
+    hoverBackgroundColor: 'rgba(255,255,255,0.22)',
+    borderRadius: 2,
+    borderSkipped: false
+  }
+]);
+
+// Trigger chart animations on scroll into view
+const chartScrollObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      // Small delay so charts are visible first
+      setTimeout(() => {
+        animateChartIn(chartAJ);
+        animateChartIn(chartOO);
+      }, 300);
+      chartScrollObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.25 });
+const s4el = document.getElementById('s4');
+if (s4el) chartScrollObs.observe(s4el);
+
+/* =============================================
+   STAT HIGHLIGHT — 62% count-up with bounce
+============================================= */
+const statHighlightObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const numEl = e.target.querySelector('.stat-h-number');
+      if (!numEl) return;
+      const target = 62;
+      let start = null;
+      const dur = 1600;
+      function step(ts) {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / dur, 1);
+        // overshoot then settle
+        const eased = p < 0.85
+          ? easeOutExpo(p / 0.85)
+          : 1 + Math.sin((p - 0.85) / 0.15 * Math.PI) * 0.03;
+        numEl.textContent = Math.min(Math.round(eased * target), 99) + '%';
+        if (p < 1) requestAnimationFrame(step);
+        else numEl.textContent = '62%';
+      }
+      requestAnimationFrame(step);
+      statHighlightObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+const statHl = document.querySelector('.stat-highlight');
+if (statHl) statHighlightObs.observe(statHl);
+
+/* =============================================
+   LEAD MONTH NUMBERS — count up on scroll
+============================================= */
+// Already handled by legacy data-target observer above
+
+/* =============================================
+   DEBTOR KPI count-ups
+============================================= */
+// Wire up debtor KPI values
+const debtorKpiObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      // Animate "22"
+      const v22 = e.target.querySelector('.debtor-kpi-value:not(.orange)');
+      if (v22 && v22.textContent.trim() === '22') {
+        animateSingleNumber(v22, 22, '', '', 0, 1000);
+      }
+      // Animate "€9.533"
+      const vEur = Array.from(e.target.querySelectorAll('.debtor-kpi-value')).find(el => el.textContent.includes('9.533'));
+      if (vEur) {
+        animateSingleNumber(vEur, 9533, '€', '', 0, 1400, true);
+      }
+      // Animate "0,54%"
+      const vPct = e.target.querySelector('.debtor-kpi-value.orange');
+      if (vPct) {
+        animateDecimalPct(vPct, 0.54, 1600);
+      }
+      debtorKpiObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+if (s6el) debtorKpiObs.observe(s6el);
+
+function animateSingleNumber(el, target, prefix, suffix, delay, dur, thousands) {
+  setTimeout(() => {
+    let start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / dur, 1);
+      const v = Math.floor(easeOutExpo(p) * target);
+      el.textContent = prefix + (thousands ? v.toLocaleString('it-IT') : v) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = prefix + (thousands ? target.toLocaleString('it-IT') : target) + suffix;
+    }
+    requestAnimationFrame(step);
+  }, delay);
+}
+
+function animateDecimalPct(el, target, dur) {
+  let start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / dur, 1);
+    const v = easeOutExpo(p) * target;
+    el.textContent = v.toFixed(2).replace('.', ',') + '%';
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target.toFixed(2).replace('.', ',') + '%';
+  }
+  requestAnimationFrame(step);
+}
+
+/* =============================================
+   ATHLON NUMBERS — animate on scroll
+============================================= */
+const athlonObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      // Stagger each card's number
+      e.target.querySelectorAll('.athlon-num-card').forEach((card, i) => {
+        const valEl = card.querySelector('.athlon-num-value');
+        if (!valEl) return;
+        const raw = valEl.textContent.trim(); // e.g. "€200k", "€50–55k", "€30k"
+        // Extract the dominant number for animation
+        const match = raw.match(/[\d]+/g);
+        if (!match) return;
+        const mainNum = parseInt(match[0]);
+        const prefix = raw.includes('€') ? '€' : '';
+        const suffix = raw.includes('k') ? 'k' : '';
+        const hasRange = raw.includes('–');
+
+        valEl.textContent = prefix + '0' + suffix;
+        setTimeout(() => {
+          let start = null;
+          const dur = 1400;
+          function step(ts) {
+            if (!start) start = ts;
+            const p = Math.min((ts - start) / dur, 1);
+            const v = Math.floor(easeOutExpo(p) * mainNum);
+            if (hasRange) {
+              const match2 = raw.match(/[\d]+/g);
+              const n2 = parseInt(match2[1]);
+              const v2 = Math.floor(easeOutExpo(p) * n2);
+              valEl.textContent = prefix + v + '–' + v2 + suffix;
+            } else {
+              valEl.textContent = prefix + v + suffix;
+            }
+            if (p < 1) requestAnimationFrame(step);
+            else valEl.textContent = raw;
+          }
+          requestAnimationFrame(step);
+        }, i * 180);
+      });
+      athlonObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+const athlonGrid = document.querySelector('.athlon-numbers');
+if (athlonGrid) athlonObs.observe(athlonGrid);
+// The hero ghost number pulses
+const heroNum = document.querySelector('.hero-number');
+if (heroNum) {
+  let v = 0;
+  function tickHero() {
+    if (v < 1) { v += 0.012; heroNum.style.opacity = (v * 0.03).toFixed(3); }
+    requestAnimationFrame(tickHero);
+  }
+  requestAnimationFrame(tickHero);
+}
+
+/* =============================================
+   CHANNEL % — animated fill bar under each card
+============================================= */
+const channelObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.channel-card').forEach((card, i) => {
+        const pctEl = card.querySelector('.channel-pct');
+        const target = parseInt(pctEl.textContent);
+        pctEl.textContent = '0%';
+        setTimeout(() => {
+          let start = null;
+          const dur = 1200;
+          function step(ts) {
+            if (!start) start = ts;
+            const p = Math.min((ts - start) / dur, 1);
+            pctEl.textContent = Math.floor(easeOutExpo(p) * target) + '%';
+            if (p < 1) requestAnimationFrame(step);
+            else pctEl.textContent = target + '%';
+          }
+          requestAnimationFrame(step);
+        }, i * 300);
+      });
+      channelObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.4 });
+const s2el = document.getElementById('s2');
+if (s2el) channelObs.observe(s2el);
+</script>
+</body>
+</html>
