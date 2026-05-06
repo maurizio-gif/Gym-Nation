@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Athlon × Orange — Customer Journey Digitale</title>
+<title>Ready 2 Digital × Orange Palestre Italiane</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js">
 
@@ -82,9 +82,10 @@
   .nav-logo {
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 900;
-    font-size: 22px;
-    letter-spacing: 0.02em;
+    font-size: 16px;
+    letter-spacing: 0.04em;
     color: var(--white);
+    text-transform: uppercase;
   }
   .nav-logo span { color: var(--orange); }
   .nav-dots {
@@ -182,6 +183,19 @@
     opacity: 0;
     animation: fadeUp 0.8s 0.7s forwards;
   }
+  .hero-brand-line {
+    margin-top: 40px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #666;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+  }
+  .hero-brand-line span { color: var(--orange); }
+
   .hero-scroll {
     margin-top: 64px;
     display: flex;
@@ -1096,7 +1110,7 @@
 <div class="progress-bar" id="progressBar"></div>
 
 <nav>
-  <div class="nav-logo">ATHLON <span>×</span> ORANGE</div>
+  <div class="nav-logo">READY 2 DIGITAL <span>×</span> ORANGE PALESTRE ITALIANE</div>
   <div class="nav-dots" id="navDots">
     <div class="nav-dot active" onclick="scrollTo(0,0)"></div>
     <div class="nav-dot" onclick="document.getElementById('s2').scrollIntoView({behavior:'smooth'})"></div>
@@ -1115,12 +1129,13 @@
   <div class="hero-bg"></div>
   <div class="hero-line"></div>
   <div class="hero-number">01</div>
-  <div class="hero-tag">Customer Journey Digitale — Caso Studio</div>
+  <div class="hero-tag">Ready 2 Digital × Orange Palestre Italiane</div>
   <h1 class="hero-title">
     Come funziona<br>
     <em>un sistema</em><br>
     che scala.
   </h1>
+  <div class="hero-brand-line">Caso Studio <span>—</span> Athlon Club</div>
   <p class="hero-sub">Un modello costruito su dati reali. Cosa cambia quando lead management, iscrizione, pagamenti e retention sono un sistema unico e connesso.</p>
   <div class="hero-scroll">
     <div class="hero-scroll-line"></div>
