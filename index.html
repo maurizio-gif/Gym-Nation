@@ -836,77 +836,6 @@
     flex-shrink: 0;
   }
 
-  /* SLIDE 9 — PASSO SUCCESSIVO */
-  #s9 { background: var(--dark); }
-  .next-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    align-items: stretch;
-  }
-  .next-left {
-    background: var(--orange);
-    padding: 56px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .next-left-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 52px;
-    text-transform: uppercase;
-    line-height: 0.92;
-    color: var(--white);
-    margin-bottom: 24px;
-  }
-  .next-left-quote {
-    font-size: 16px;
-    color: rgba(255,255,255,0.9);
-    line-height: 1.6;
-    font-weight: 300;
-    font-style: italic;
-    border-left: 3px solid rgba(255,255,255,0.5);
-    padding-left: 20px;
-  }
-  .next-right {
-    background: var(--dark2);
-    padding: 56px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    justify-content: center;
-  }
-  .next-step {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    padding-bottom: 24px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .next-step:last-child { border-bottom: none; padding-bottom: 0; }
-  .next-step-n {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: 32px;
-    color: var(--orange);
-    line-height: 1;
-    min-width: 32px;
-  }
-  .next-step-text {
-    font-size: 15px;
-    color: #CCCCCC;
-    line-height: 1.6;
-    font-weight: 400;
-    padding-top: 6px;
-  }
-  .next-step-text strong {
-    display: block;
-    font-size: 16px;
-    color: var(--white);
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
 
   /* ANIMATIONS */
   @keyframes fadeUp {
@@ -1096,7 +1025,7 @@
     section { padding: 100px 24px 60px; }
     nav { padding: 16px 24px; }
     .model-grid, .charts-wrap, .retention-grid,
-    .cost-layout, .punto-layout, .next-layout,
+    .cost-layout, .punto-layout,
     .debtor-layout, .leads-grid, .lead-channels {
       grid-template-columns: 1fr;
     }
@@ -1120,7 +1049,6 @@
     <div class="nav-dot" onclick="document.getElementById('s6').scrollIntoView({behavior:'smooth'})"></div>
     <div class="nav-dot" onclick="document.getElementById('s7').scrollIntoView({behavior:'smooth'})"></div>
     <div class="nav-dot" onclick="document.getElementById('s8').scrollIntoView({behavior:'smooth'})"></div>
-    <div class="nav-dot" onclick="document.getElementById('s9').scrollIntoView({behavior:'smooth'})"></div>
   </div>
 </nav>
 
@@ -1571,52 +1499,6 @@
   </div>
 </section>
 
-<!-- SLIDE 9 — PASSO SUCCESSIVO -->
-<section id="s9">
-  <div class="s-label reveal">08 — Passo successivo</div>
-  <h2 class="s-title reveal reveal-delay-1" style="margin-bottom:40px;">Cosa servirebbe<br>per capire se e come<br><em>si applica a Orange.</em></h2>
-
-  <div class="next-layout reveal reveal-delay-2">
-    <div class="next-left">
-      <div>
-        <div class="next-left-title">30 giorni.<br>Gap analysis<br>completa.</div>
-      </div>
-      <div class="next-left-quote">
-        "Ho costruito questo su un club.<br>La domanda è: quanto vale replicarlo su 27?"
-      </div>
-    </div>
-    <div class="next-right">
-      <div class="next-step">
-        <div class="next-step-n">01</div>
-        <div class="next-step-text">
-          <strong>Accesso al gestionale</strong>
-          Analisi dei dati di conversione attuali per club e per rete.
-        </div>
-      </div>
-      <div class="next-step">
-        <div class="next-step-n">02</div>
-        <div class="next-step-text">
-          <strong>Stack tecnologico esistente</strong>
-          CRM, sistema pagamenti, processo iscrizione, analytics.
-        </div>
-      </div>
-      <div class="next-step">
-        <div class="next-step-n">03</div>
-        <div class="next-step-text">
-          <strong>3–5 club campione</strong>
-          Mystery tour esteso + analisi dati interni per validare le ipotesi.
-        </div>
-      </div>
-      <div class="next-step">
-        <div class="next-step-n">04</div>
-        <div class="next-step-text">
-          <strong>Output</strong>
-          Gap analysis completa + roadmap prioritizzata con impatto stimato per singolo club e per rete.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <script>
 /* =============================================
@@ -1646,7 +1528,7 @@ window.addEventListener('scroll', () => {
 /* =============================================
    NAV DOTS
 ============================================= */
-const sectionIds = ['s1','s2','s3','s4','s5','s6','s7','s8','s9'];
+const sectionIds = ['s1','s2','s3','s4','s5','s6','s7','s8'];
 const dots = document.querySelectorAll('.nav-dot');
 const navObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
