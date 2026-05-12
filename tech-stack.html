@@ -31,10 +31,12 @@
     background:#0A0A0A;
     color:#F8F8F8;
   }
-  .slide:not(.cover-slide) .logo-slot{
-    background:#0A0A0A;
-    padding:6px 10px;
-    border-radius:3px;
+  .cover-logo{
+    height:140px;
+    width:auto;
+    display:block;
+    margin:0 auto 36px;
+    filter:invert(1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
@@ -647,6 +649,7 @@
 <!-- ============== COVER ============== -->
 <section class="slide cover-slide" id="cover">
   <div class="cover-inner">
+    <img src="logo_orange.png" alt="Orange Palestre Italiane" class="cover-logo reveal">
     <div class="cover-pre reveal">L'infrastruttura della visione</div>
     <h1 class="cover-title reveal reveal-d1">
       <span class="cover-script">Tech</span> <span class="hl">Stack</span>

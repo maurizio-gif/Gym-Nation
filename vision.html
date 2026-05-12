@@ -31,10 +31,14 @@
     background:#0A0A0A;
     color:#F8F8F8;
   }
-  .slide:not(.cover-slide) .logo-slot{
-    background:#0A0A0A;
-    padding:6px 10px;
-    border-radius:3px;
+  .cover-logo{
+    position:absolute;
+    top:36px;
+    left:90px;
+    height:88px;
+    width:auto;
+    z-index:5;
+    filter:invert(1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
@@ -1352,6 +1356,7 @@
 
 <!-- ============== COPERTINA ============== -->
 <section class="slide cover-slide" id="cover">
+  <img src="logo_orange.png" alt="Orange Palestre Italiane" class="cover-logo">
   <div class="cover-hero">
     <img src="hero_orange.webp" alt="Orange Palestre Italiane" class="cover-hero-img">
     <div class="cover-hero-overlay"></div>
