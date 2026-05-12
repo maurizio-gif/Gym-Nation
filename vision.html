@@ -962,6 +962,31 @@
     align-items:center;
     justify-content:center;
   }
+  .closing-cta{
+    display:inline-flex;
+    align-items:center;
+    gap:14px;
+    margin-top:50px;
+    padding:18px 36px;
+    background:var(--orange);
+    color:var(--bg);
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    text-decoration:none;
+    border-radius:2px;
+    transition:all 0.3s ease;
+  }
+  .closing-cta:hover{
+    background:var(--orange-deep);
+    transform:translateX(4px);
+  }
+  .closing-cta .arrow{
+    font-size:20px;
+    line-height:1;
+  }
   .closing-pre{
     font-size:18px;
     letter-spacing:0.4em;
@@ -1955,6 +1980,10 @@
     Un'azienda <span class="script script-large">digitale</span><br>che ha tanti club.
   </h2>
   <div class="closing-meta reveal reveal-d3">Orange Palestre Italiane &mdash; Visione di Maurizio Taruggi</div>
+  <a href="tech-stack.html" class="closing-cta reveal reveal-d4">
+    <span>Esplora il Tech Stack</span>
+    <span class="arrow">→</span>
+  </a>
 </section>
 
 <script>
