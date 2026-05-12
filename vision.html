@@ -708,6 +708,82 @@
   }
   .hub-list li:last-child{border-bottom:1px solid var(--line)}
 
+  /* === SLIDE 9: CONTROLLO OPERATIVO === */
+  #ops-control{background:var(--bg)}
+  .ops-title{
+    font-size:clamp(48px, 5vw, 84px);
+    line-height:1.0;
+    font-weight:300;
+    letter-spacing:-0.02em;
+    max-width:1500px;
+    margin-bottom:24px;
+    text-transform:uppercase;
+  }
+  .ops-sub{
+    font-size:22px;
+    color:var(--text-dim);
+    max-width:1300px;
+    margin-bottom:50px;
+    line-height:1.5;
+  }
+  .ops-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:2px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin-bottom:40px;
+  }
+  .ops-card{
+    background:var(--bg-card);
+    padding:34px 28px;
+  }
+  .ops-card-num{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:48px;
+    line-height:1;
+    color:var(--orange);
+    font-weight:300;
+    margin-bottom:16px;
+    letter-spacing:-0.03em;
+  }
+  .ops-card-name{
+    font-size:22px;
+    font-weight:700;
+    text-transform:uppercase;
+    line-height:1.1;
+    margin-bottom:14px;
+    letter-spacing:-0.01em;
+  }
+  .ops-card-desc{
+    font-size:16px;
+    color:var(--text-dim);
+    line-height:1.5;
+  }
+  .ops-asset{
+    border-left:3px solid var(--orange);
+    padding:20px 26px;
+    background:rgba(255,106,0,0.04);
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .ops-asset-label{
+    font-size:13px;
+    letter-spacing:0.3em;
+    color:var(--orange);
+    text-transform:uppercase;
+    font-weight:700;
+  }
+  .ops-asset-text{
+    font-size:20px;
+    color:var(--text);
+    line-height:1.45;
+    max-width:1500px;
+  }
+  .ops-asset-text .em{color:var(--orange);font-weight:700}
+
   /* === SLIDE 6: KPI === */
   #kpi{background:var(--bg)}
   .kpi-title{
@@ -1751,7 +1827,56 @@
   </div>
 </section>
 
-<!-- ============== SLIDE 6: KPI ============== -->
+<!-- ============== SLIDE 9: CONTROLLO OPERATIVO ============== -->
+<section class="slide" id="ops-control">
+  <div class="slide-header">
+    <div class="logo-slot">
+      <img src="logo_orange.png" alt="Orange Palestre Italiane">
+    </div>
+    <div class="slide-tag reveal">09 — Controllo Operativo</div>
+  </div>
+  <div class="slide-author">Maurizio Taruggi</div>
+  <div class="slide-num">09 / 10</div>
+
+  <h2 class="ops-title reveal reveal-d1">
+    Tracciare ogni gesto.<br>
+    Garantire ogni <span class="script script-mid">standard</span>.
+  </h2>
+  <p class="ops-sub reveal reveal-d2">
+    La digitalizzazione dell'operatività trasforma la gestione fisica del club in un asset misurabile, replicabile, scalabile. Niente più checklist cartacee, niente più verifiche a campione, niente più rischi nascosti.
+  </p>
+
+  <div class="ops-grid reveal reveal-d3">
+    <div class="ops-card">
+      <div class="ops-card-num">01</div>
+      <div class="ops-card-name">Registri digitali</div>
+      <div class="ops-card-desc">Pulizie e manutenzioni firmate dall'app, con timestamp, foto e responsabile. Tracciabilità totale, zero carta.</div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-card-num">02</div>
+      <div class="ops-card-name">Programmazione & alert</div>
+      <div class="ops-card-desc">Calendari operativi automatici. Il sistema notifica scadenze, ritardi e anomalie prima che diventino problemi.</div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-card-num">03</div>
+      <div class="ops-card-name">Storicizzazione & analisi</div>
+      <div class="ops-card-desc">Ogni intervento diventa dato. Frequenze, costi, fornitori, criticità ricorrenti — confrontabili club per club.</div>
+    </div>
+    <div class="ops-card">
+      <div class="ops-card-num">04</div>
+      <div class="ops-card-name">Compliance integrata</div>
+      <div class="ops-card-desc">Sanitario, sicurezza, HACCP, antincendio. Documentazione sempre pronta, audit superabili in pochi click.</div>
+    </div>
+  </div>
+
+  <div class="ops-asset reveal reveal-d4">
+    <span class="ops-asset-label">Il valore strategico</span>
+    <span class="ops-asset-text">Un gruppo che vuole scalare non può permettersi standard <span class="em">verbali</span>. Il controllo operativo digitale è l'asset che rende ogni nuovo club <span class="em">replicabile dal giorno uno</span>.</span>
+  </div>
+</section>
+
+
+<!-- ============== SLIDE 10: KPI ============== -->
 <section class="slide" id="kpi">
   <div class="slide-header">
     <div class="logo-slot">
