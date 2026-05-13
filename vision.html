@@ -1356,9 +1356,139 @@
     .arch-diagram{max-width:420px;margin:0 auto}
   }
 
+
+  /* === HAMBURGER MENU (shared across all pages) === */
+  .menu-trigger{
+    position:fixed;
+    top:30px;
+    right:36px;
+    width:60px;
+    height:60px;
+    background:rgba(255,255,255,0.92);
+    border:1px solid var(--orange);
+    border-radius:2px;
+    cursor:pointer;
+    z-index:200;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    backdrop-filter:blur(6px);
+    transition:background 0.25s ease, transform 0.3s ease;
+  }
+  .menu-trigger:hover{background:var(--orange)}
+  .menu-trigger span{
+    display:block;
+    width:26px;
+    height:2px;
+    background:var(--orange);
+    transition:all 0.3s ease;
+  }
+  .menu-trigger:hover span{background:#fff}
+  .menu-trigger.open{background:var(--orange)}
+  .menu-trigger.open span{background:#fff}
+  .menu-trigger.open span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+  .menu-trigger.open span:nth-child(2){opacity:0}
+  .menu-trigger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+  .menu-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(10,10,10,0.97);
+    backdrop-filter:blur(10px);
+    z-index:150;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.4s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .menu-overlay.open{opacity:1;pointer-events:auto}
+  .menu-inner{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    padding:0 40px;
+    max-width:1200px;
+    width:100%;
+  }
+  .menu-link{
+    display:grid;
+    grid-template-columns:80px 1fr auto;
+    gap:36px;
+    align-items:center;
+    padding:28px 40px;
+    color:#fff;
+    text-decoration:none;
+    border-top:1px solid rgba(255,255,255,0.12);
+    transition:color 0.3s ease, padding 0.3s ease;
+    transform:translateY(40px);
+    opacity:0;
+  }
+  .menu-link:last-child{border-bottom:1px solid rgba(255,255,255,0.12)}
+  .menu-overlay.open .menu-link{
+    opacity:1;
+    transform:translateY(0);
+    transition:opacity 0.6s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1), color 0.3s ease, padding 0.3s ease;
+  }
+  .menu-overlay.open .menu-link:nth-child(1){transition-delay:0.1s}
+  .menu-overlay.open .menu-link:nth-child(2){transition-delay:0.18s}
+  .menu-overlay.open .menu-link:nth-child(3){transition-delay:0.26s}
+  .menu-link .num{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:300;
+    font-size:42px;
+    color:var(--orange);
+    line-height:1;
+  }
+  .menu-link .ttl{
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:60px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:-0.01em;
+    line-height:1;
+  }
+  .menu-link .arrow{
+    font-size:42px;
+    color:var(--orange);
+    line-height:1;
+    transition:transform 0.3s ease;
+  }
+  .menu-link:hover{color:var(--orange);padding-left:60px}
+  .menu-link:hover .arrow{transform:translateX(10px)}
+  .menu-link.current{color:var(--orange)}
+  .menu-link.current .ttl::after{
+    content:" ✱";
+    color:var(--orange);
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:30px;
+  }
 </style>
 </head>
 <body>
+<!-- ============== HAMBURGER MENU ============== -->
+<button class="menu-trigger" id="menuTrigger" aria-label="Apri menu">
+  <span></span><span></span><span></span>
+</button>
+<nav class="menu-overlay" id="menuOverlay" aria-label="Navigazione principale">
+  <div class="menu-inner">
+    <a class="menu-link" href="index.html" data-page="index">
+      <span class="num">01</span><span class="ttl">Caso Studio Athlon</span><span class="arrow">→</span>
+    </a>
+    <a class="menu-link" href="vision.html" data-page="vision">
+      <span class="num">02</span><span class="ttl">Vision Digitale 2026—28</span><span class="arrow">→</span>
+    </a>
+    <a class="menu-link" href="tech-stack.html" data-page="tech-stack">
+      <span class="num">03</span><span class="ttl">Tech Stack</span><span class="arrow">→</span>
+    </a>
+  </div>
+</nav>
+
+
 
 <!-- ============== COPERTINA ============== -->
 <section class="slide cover-slide" id="cover">
@@ -2003,6 +2133,25 @@
 </section>
 
 <script>
+  // === HAMBURGER MENU ===
+  (function(){
+    const trigger = document.getElementById('menuTrigger');
+    const overlay = document.getElementById('menuOverlay');
+    if(!trigger || !overlay) return;
+    function close(){ trigger.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow=''; }
+    function open(){ trigger.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow='hidden'; }
+    trigger.addEventListener('click',()=>{
+      if(overlay.classList.contains('open')) close(); else open();
+    });
+    overlay.addEventListener('click',e=>{ if(e.target===overlay) close(); });
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+    const path = location.pathname.split('/').pop().replace('.html','') || 'index';
+    document.querySelectorAll('.menu-link').forEach(l=>{
+      if(l.dataset.page === path) l.classList.add('current');
+    });
+  })();
+
+
   // Stagger diagonale top-left → bottom-right per ogni slide
   function stagger(slide){
     if(slide.dataset.staggered) return;
