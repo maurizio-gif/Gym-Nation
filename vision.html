@@ -1135,6 +1135,123 @@
     line-height:1.5;
   }
 
+  /* === SLIDE 02: OBIETTIVI DI BUSINESS === */
+  #objectives .objectives-pre{
+    font-size:29px;
+    letter-spacing:0.4em;
+    color:var(--orange);
+    text-transform:uppercase;
+    font-weight:700;
+    margin-bottom:20px;
+  }
+  .objectives-statement{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:300;
+    font-size:clamp(50px, 6vw, 88px);
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    max-width:1500px;
+    margin-bottom:22px;
+  }
+  .objectives-statement .em{
+    font-style:normal;
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:800;
+    color:var(--orange);
+    text-transform:uppercase;
+    letter-spacing:-0.01em;
+  }
+  .objectives-sub{
+    font-size:32px;
+    color:var(--text-dim);
+    max-width:1200px;
+    margin-bottom:30px;
+    line-height:1.45;
+  }
+  .objectives-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:2px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .obj-pillar{
+    background:var(--bg-card);
+    padding:24px 26px;
+    display:flex;
+    flex-direction:column;
+  }
+  .obj-pillar-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    padding-bottom:14px;
+    margin-bottom:10px;
+    border-bottom:1px solid var(--line);
+  }
+  .obj-pillar-num{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:54px;
+    line-height:1;
+    color:var(--orange);
+    font-weight:300;
+    letter-spacing:-0.03em;
+  }
+  .obj-pillar-name{
+    font-size:34px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    line-height:1;
+  }
+  .obj-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  .obj-list li{
+    padding:14px 0;
+    border-top:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .obj-list li:first-child{
+    border-top:none;
+    padding-top:6px;
+  }
+  .obj-action{
+    font-size:27px;
+    font-weight:800;
+    color:var(--orange);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    line-height:1;
+  }
+  .obj-desc{
+    font-size:23px;
+    color:var(--text-dim);
+    line-height:1.4;
+  }
+  .objectives-footnote{
+    margin-top:24px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:24px;
+    color:var(--text-mute);
+    letter-spacing:0.04em;
+    line-height:1.4;
+  }
+  .objectives-footnote strong{
+    color:var(--orange);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.15em;
+    font-size:22px;
+  }
+
   /* === DEEP DIVE SLIDES (03, 04, 06) === */
   .dd-title{
     font-size:clamp(48px, 5vw, 80px);
@@ -1524,7 +1641,7 @@
     <div class="slide-tag reveal">01 — Il Principio Fondante</div>
   </div>
   <div class="slide-author">Maurizio Taruggi</div>
-  <div class="slide-num">01 / 10</div>
+  <div class="slide-num">01 / 11</div>
 
   <div class="principle-pre reveal">La tesi</div>
   <h2 class="principle-statement reveal reveal-d1">
@@ -1554,16 +1671,108 @@
   </div>
 </section>
 
+<!-- ============== SLIDE 02: OBIETTIVI DI BUSINESS ============== -->
+<section class="slide" id="objectives">
+  <div class="slide-header">
+    <div class="logo-slot">
+      <img src="logo_orange.png" alt="Orange Palestre Italiane">
+    </div>
+    <div class="slide-tag reveal">02 — Gli Obiettivi di Business</div>
+  </div>
+  <div class="slide-author">Maurizio Taruggi</div>
+  <div class="slide-num">02 / 11</div>
+
+  <div class="objectives-pre reveal">I deliverable</div>
+  <h2 class="objectives-statement reveal reveal-d1">
+    Cosa cambia per <span class="em">Orange</span>.<br>
+    Nove obiettivi, una sola <span class="script script-mid">iniziativa</span>.
+  </h2>
+  <p class="objectives-sub reveal reveal-d2">
+    La digitalizzazione full dei processi non è un progetto IT.
+    È la leva che muove ricavi, costi ed esperienza cliente — insieme.
+  </p>
+
+  <div class="objectives-grid reveal reveal-d3">
+    <div class="obj-pillar">
+      <div class="obj-pillar-head">
+        <div class="obj-pillar-num">I</div>
+        <div class="obj-pillar-name">Ricavi</div>
+      </div>
+      <ul class="obj-list">
+        <li>
+          <div class="obj-action">+ Conversioni</div>
+          <div class="obj-desc">Iscrizione 100% online, firma digitale, zero attriti tra interesse e cliente attivo.</div>
+        </li>
+        <li>
+          <div class="obj-action">Lead handling</div>
+          <div class="obj-desc">Nurturing condizionale automatico su email e WhatsApp. Nessun lead dimenticato.</div>
+        </li>
+        <li>
+          <div class="obj-action">+ Retention</div>
+          <div class="obj-desc">Rinnovo proattivo, customer voice continua, churn anticipato dai dati.</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="obj-pillar">
+      <div class="obj-pillar-head">
+        <div class="obj-pillar-num">II</div>
+        <div class="obj-pillar-name">Efficienza</div>
+      </div>
+      <ul class="obj-list">
+        <li>
+          <div class="obj-action">− Costi di personale</div>
+          <div class="obj-desc">Meno data entry, meno reception time. Il personale torna a vendere e fidelizzare.</div>
+        </li>
+        <li>
+          <div class="obj-action">Finance automatico</div>
+          <div class="obj-desc">Fatturazione, riconciliazione bancaria, recupero crediti senza intervento umano.</div>
+        </li>
+        <li>
+          <div class="obj-action">− Errori operativi</div>
+          <div class="obj-desc">Una sola fonte del dato. Mai più disallineamenti tra club, gestionale e contabilità.</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="obj-pillar">
+      <div class="obj-pillar-head">
+        <div class="obj-pillar-num">III</div>
+        <div class="obj-pillar-name">Esperienza &amp; Scala</div>
+      </div>
+      <ul class="obj-list">
+        <li>
+          <div class="obj-action">− Churn</div>
+          <div class="obj-desc">Segnali deboli intercettati prima della disdetta. Recupero del cliente, non rincorsa.</div>
+        </li>
+        <li>
+          <div class="obj-action">+ Utilizzo club</div>
+          <div class="obj-desc">Dati di affluenza e frequenza per ottimizzare orari, corsi e personale di sala.</div>
+        </li>
+        <li>
+          <div class="obj-action">AI integrata</div>
+          <div class="obj-desc">Personalizzazione, copilot operativo per i Club Manager, intelligence sui dati di rete.</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="objectives-footnote reveal reveal-d4">
+    <strong>Il punto</strong>&nbsp;&nbsp;Non comprare software. Mettere Orange nelle condizioni di crescere con meno frizione, meno costi e più dati.
+  </div>
+</section>
+
+
 <!-- ============== SLIDE 3: CUSTOMER JOURNEY ============== -->
 <section class="slide" id="journey">
   <div class="slide-header">
     <div class="logo-slot">
       <img src="logo_orange.png" alt="Orange Palestre Italiane">
     </div>
-    <div class="slide-tag reveal">02 — Il Customer Journey</div>
+    <div class="slide-tag reveal">03 — Il Customer Journey</div>
   </div>
   <div class="slide-author">Maurizio Taruggi</div>
-  <div class="slide-num">02 / 10</div>
+  <div class="slide-num">03 / 11</div>
 
   <h2 class="journey-title reveal reveal-d1">
     Il cliente non vede i sistemi.<br>
@@ -1697,10 +1906,10 @@
     <div class="logo-slot">
       <img src="logo_orange.png" alt="Orange Palestre Italiane">
     </div>
-    <div class="slide-tag reveal">03 — Fasi 1 & 2 del Journey</div>
+    <div class="slide-tag reveal">04 — Fasi 1 & 2 del Journey</div>
   </div>
   <div class="slide-author">Maurizio Taruggi</div>
-  <div class="slide-num">03 / 10</div>
+  <div class="slide-num">04 / 11</div>
 
   <h2 class="dd-title reveal reveal-d1">
     Acquisire il contatto.<br>
@@ -1744,10 +1953,10 @@
     <div class="logo-slot">
       <img src="logo_orange.png" alt="Orange Palestre Italiane">
     </div>
-    <div class="slide-tag reveal">04 — Fasi 3 & 4 del Journey</div>
+    <div class="slide-tag reveal">05 — Fasi 3 & 4 del Journey</div>
   </div>
   <div class="slide-author">Maurizio Taruggi</div>
-  <div class="slide-num">04 / 10</div>
+  <div class="slide-num">05 / 11</div>
 
   <h2 class="dd-title reveal reveal-d1">
     Iscrivere senza attrito.<br>
@@ -1791,10 +2000,10 @@
     <div class="logo-slot">
       <img src="logo_orange.png" alt="Orange Palestre Italiane">
     </div>
-    <div class="slide-tag reveal">05 — Il Cuore Strategico</div>
+    <div class="slide-tag reveal">06 — Il Cuore Strategico</div>
   </div>
   <div class="slide-author">Maurizio Taruggi</div>
-  <div class="slide-num">05 / 10</div>
+  <div class="slide-num">06 / 11</div>
 
   <div class="app-layout">
     <div>
@@ -1856,10 +2065,10 @@
     <div class="logo-slot">
       <img src="logo_orange.png" alt="Orange Palestre Italiane">
     </div>
-    <div class="slide-tag reveal">06 — Fasi 6 & 7 del Journey</div>
+    <div class="slide-tag reveal">07 — Fasi 6 & 7 del Journey</div>
   </div>
   <div class="slide-author">Maurizio Taruggi</div>
-  <div class="slide-num">06 / 10</div>
+  <div class="slide-num">07 / 11</div>
 
   <h2 class="dd-title reveal reveal-d1">
     Ascoltare in tempo reale.<br>
@@ -1903,10 +2112,10 @@
     <div class="logo-slot">
       <img src="logo_orange.png" alt="Orange Palestre Italiane">
     </div>
-    <div class="slide-tag reveal">07 — L'Architettura del Modello</div>
+    <div class="slide-tag reveal">08 — L'Architettura del Modello</div>
   </div>
   <div class="slide-author">Maurizio Taruggi</div>
-  <div class="slide-num">07 / 10</div>
+  <div class="slide-num">08 / 11</div>
 
   <h2 class="arch-title reveal reveal-d1">
     Sotto la superficie:<br>
@@ -1961,10 +2170,10 @@
     <div class="logo-slot">
       <img src="logo_orange.png" alt="Orange Palestre Italiane">
     </div>
-    <div class="slide-tag reveal">08 — Modello Operativo</div>
+    <div class="slide-tag reveal">09 — Modello Operativo</div>
   </div>
   <div class="slide-author">Maurizio Taruggi</div>
-  <div class="slide-num">08 / 10</div>
+  <div class="slide-num">09 / 11</div>
 
   <h2 class="hubspoke-title reveal reveal-d1">
     La centrale <span class="em">decide</span>.<br>
@@ -2004,10 +2213,10 @@
     <div class="logo-slot">
       <img src="logo_orange.png" alt="Orange Palestre Italiane">
     </div>
-    <div class="slide-tag reveal">09 — Controllo Operativo</div>
+    <div class="slide-tag reveal">10 — Controllo Operativo</div>
   </div>
   <div class="slide-author">Maurizio Taruggi</div>
-  <div class="slide-num">09 / 10</div>
+  <div class="slide-num">10 / 11</div>
 
   <h2 class="ops-title reveal reveal-d1">
     Tracciare ogni gesto.<br>
@@ -2053,10 +2262,10 @@
     <div class="logo-slot">
       <img src="logo_orange.png" alt="Orange Palestre Italiane">
     </div>
-    <div class="slide-tag reveal">10 — Come si Misura</div>
+    <div class="slide-tag reveal">11 — Come si Misura</div>
   </div>
   <div class="slide-author">Maurizio Taruggi</div>
-  <div class="slide-num">10 / 10</div>
+  <div class="slide-num">11 / 11</div>
 
   <h2 class="kpi-title reveal reveal-d1">
     Quello che <span class="em">si misura</span><br>
