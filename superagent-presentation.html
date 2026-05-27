@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>SuperAgent.fit — Presentazione</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #00FF6A;
+    --green-dark: #00cc54;
+    --green-bg: #0d2e1c;
+    --green-card: #122b1b;
+    --red: #FF4444;
+    --red-bg: #2e0d0d;
+    --orange: #FF8C00;
+    --bg: #080808;
+    --card-bg: #111111;
+    --card-border: #1e1e1e;
+    --text: #ffffff;
+    --text-muted: #888888;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  /* SLIDESHOW */
+  .slides-wrapper {
+    width: 100%; height: 100%;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity .45s ease, transform .45s ease;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.exit {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* NAV */
+  .nav {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 100;
+  }
+
+  .nav button {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .nav button:hover {
+    background: var(--green-bg);
+    border-color: var(--green);
+  }
+
+  .nav .counter {
+    font-size: 13px;
+    color: var(--text-muted);
+    min-width: 60px;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  .progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--green);
+    transition: width .4s ease;
+    z-index: 100;
+  }
+
+  /* SLIDE NUMBER */
+  .slide-num {
+    position: fixed;
+    top: 24px; right: 32px;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    z-index: 100;
+  }
+
+  /* LOGO */
+  .logo-top {
+    position: fixed;
+    top: 24px; left: 32px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    z-index: 100;
+  }
+
+  .logo-top span { color: var(--green); }
+
+  /* TYPOGRAPHY */
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid var(--green-bg);
+    background: var(--green-bg);
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+  }
+
+  .tag.red { color: var(--red); background: var(--red-bg); border-color: var(--red-bg); }
+
+  h1 {
+    font-size: clamp(42px, 5.5vw, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  h1 .green { color: var(--green); }
+  h1 .red { color: var(--red); }
+
+  h2 {
+    font-size: clamp(28px, 3.5vw, 48px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h2 .green { color: var(--green); }
+
+  h3 {
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: clamp(14px, 1.3vw, 18px);
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 640px;
+  }
+
+  .lead { font-size: clamp(16px, 1.5vw, 21px); color: #bbbbbb; }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 28px 32px;
+  }
+
+  .card.green-border { border-color: #1a4a2e; background: var(--green-card); }
+  .card.red-border { border-color: #4a1a1a; background: var(--red-bg); }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .stat-box {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .stat-box:first-child { border-radius: 16px 0 0 16px; }
+  .stat-box:last-child { border-radius: 0 16px 16px 0; }
+
+  .stat-num {
+    font-size: clamp(44px, 5vw, 68px);
+    font-weight: 900;
+    color: var(--green);
+    line-height: 1;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: clamp(14px, 1.2vw, 17px);
+    color: #cccccc;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .checklist li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .crosslist { list-style: none; }
+  .crosslist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: clamp(14px, 1.2vw, 17px);
+    color: #cccccc;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .crosslist li::before {
+    content: '✗';
+    color: var(--red);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* PROBLEM STATS */
+  .prob-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .prob-box {
+    background: var(--red-bg);
+    border: 1px solid #3a1515;
+    border-radius: 16px;
+    padding: 36px 28px;
+    text-align: center;
+  }
+
+  .prob-num {
+    font-size: clamp(48px, 5vw, 72px);
+    font-weight: 900;
+    line-height: 1;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .prob-label {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* TWO COL */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 700px; }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 18px 22px;
+  }
+
+  .step-num {
+    width: 36px; height: 36px;
+    background: var(--green);
+    color: #000;
+    font-weight: 900;
+    font-size: 15px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-content .step-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .step-content p {
+    font-size: 14px;
+    color: var(--text-muted);
+    max-width: none;
+  }
+
+  /* TOOLS GRID */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .tool-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 28px;
+    border-top: 2px solid var(--green);
+  }
+
+  .tool-icon {
+    width: 44px; height: 44px;
+    background: var(--green-card);
+    border: 1px solid #1a4a2e;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  /* CHANNELS GRID */
+  .channels-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 700px;
+    width: 100%;
+  }
+
+  .channel-box {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 24px 16px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .channel-box .ch-icon { font-size: 28px; display: block; margin-bottom: 10px; }
+
+  /* ONBOARDING STEPS */
+  .ob-steps { display: flex; flex-direction: column; gap: 20px; max-width: 700px; width: 100%; }
+
+  .ob-step {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .ob-num {
+    width: 48px; height: 48px;
+    background: var(--green-card);
+    border: 2px solid var(--green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--green);
+    flex-shrink: 0;
+  }
+
+  .ob-body h3 { color: var(--text); font-size: 16px; margin-bottom: 6px; }
+  .ob-body p { font-size: 14px; color: var(--text-muted); max-width: none; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green-card);
+    border: 1px solid #1a4a2e;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--green);
+    margin-top: 10px;
+  }
+
+  /* SLIDE CONTENT WRAPPERS */
+  .slide-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  .slide-inner.left {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* HERO special */
+  #s1 .slide-inner {
+    max-width: 900px;
+  }
+
+  #s1 h1 { font-size: clamp(52px, 7vw, 96px); }
+
+  /* CTA */
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--green);
+    color: #000;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 8px;
+  }
+
+  .cta-btn.outline {
+    background: transparent;
+    color: var(--green);
+    border: 2px solid var(--green);
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 16px;
+  }
+
+  /* PROBLEM CARD */
+  .prob-card {
+    background: var(--red-bg);
+    border: 1px solid #3a1515;
+    border-radius: 16px;
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 750px;
+  }
+
+  .prob-card h2 { font-size: clamp(22px, 3vw, 36px); }
+
+  /* QUOTE */
+  .big-quote {
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    border-left: 4px solid var(--green);
+    padding-left: 28px;
+    line-height: 1.1;
+  }
+
+  /* KEYBOARD HINT */
+  .key-hint {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    font-size: 12px;
+    color: #444;
+    z-index: 100;
+  }
+
+  /* ANIMATION CLASSES */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .animate { animation: fadeUp .5s ease forwards; }
+  .slide.active .animate:nth-child(1) { animation-delay: .1s; opacity: 0; }
+  .slide.active .animate:nth-child(2) { animation-delay: .2s; opacity: 0; }
+  .slide.active .animate:nth-child(3) { animation-delay: .3s; opacity: 0; }
+  .slide.active .animate:nth-child(4) { animation-delay: .4s; opacity: 0; }
+  .slide.active .animate:nth-child(5) { animation-delay: .5s; opacity: 0; }
+  .slide.active .animate:nth-child(6) { animation-delay: .6s; opacity: 0; }
+
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div class="progress" id="progress"></div>
+
+<!-- LOGO -->
+<div class="logo-top">SUPER<span>AGENT.FIT</span></div>
+
+<!-- SLIDE NUMBER -->
+<div class="slide-num" id="slideNum">01 / 16</div>
+
+<!-- KEY HINT -->
+<div class="key-hint">← → per navigare</div>
+
+<!-- ===== SLIDES ===== -->
+<div class="slides-wrapper" id="slidesWrapper">
+
+  <!-- SLIDE 1: HERO -->
+  <div class="slide active" id="s1">
+    <div class="slide-inner">
+      <div class="tag animate">L'unico agente AI verticale per il fitness · WhatsApp &amp; Web Chat</div>
+      <h1 class="animate">Più iscritti.<br>Meno lavoro<br><span class="green">per il tuo staff.</span></h1>
+      <p class="lead animate" style="max-width:680px; text-align:center;">Non un chatbot generico. SuperAgent.fit è costruito per chi gestisce palestre, piscine e centri sportivi. Conosce il tuo settore, parla il linguaggio dei tuoi clienti e risponde come farebbe il tuo miglior commerciale — h24, tutti i giorni.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: STATS -->
+  <div class="slide" id="s2">
+    <div class="slide-inner">
+      <div class="section-label animate">I numeri</div>
+      <h2 class="animate">Perché WhatsApp <span class="green">vince</span> sempre</h2>
+      <div class="stats-grid animate" style="margin-top: 40px;">
+        <div class="stat-box">
+          <span class="stat-num">98%</span>
+          <span class="stat-label">Chi riceve un messaggio su WhatsApp lo legge</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" style="color:#fff;">H24</span>
+          <span class="stat-label">Risponde anche la domenica alle 22:00</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">3×</span>
+          <span class="stat-label">Più risposte rispetto alle email</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">0</span>
+          <span class="stat-label">Richieste senza risposta</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: IL PROBLEMA -->
+  <div class="slide" id="s3">
+    <div class="slide-inner">
+      <div class="section-label animate" style="color: var(--red);">Il problema</div>
+      <h1 class="animate">Quante richieste perdi<br>ogni <span class="green">settimana?</span></h1>
+      <p class="lead animate" style="max-width:640px; text-align:center; margin-top: 8px;">
+        Qualcuno scrive su WhatsApp o sul sito e non riceve risposta in tempo. Qualche abbonamento scade senza che nessuno lo ricordi. Lo staff fa quello che può, ma non basta.
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: DATI PROBLEMA -->
+  <div class="slide" id="s4">
+    <div class="slide-inner">
+      <div class="prob-grid animate">
+        <div class="prob-box">
+          <span class="prob-num" style="color: var(--red);">90%</span>
+          <span class="prob-label">dei lead non risposti entro 5 min va dal competitor</span>
+        </div>
+        <div class="prob-box">
+          <span class="prob-num" style="color: var(--orange);">3×</span>
+          <span class="prob-label">più probabilità di convertire rispondendo entro 1 minuto</span>
+        </div>
+        <div class="prob-box">
+          <span class="prob-num" style="color: var(--red);">67%</span>
+          <span class="prob-label">dei membri non rinnova perché nessuno li ha ricontattati</span>
+        </div>
+      </div>
+      <div class="big-quote animate" style="margin-top: 44px;">
+        Chi non risponde subito, perde.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: I 3 PROBLEMI -->
+  <div class="slide" id="s5">
+    <div class="slide-inner left" style="max-width: 900px;">
+      <div class="section-label animate">3 problemi che bloccano la crescita</div>
+      <div class="steps animate">
+        <div class="step" style="border-color: #3a1515; background: var(--red-bg);">
+          <div class="step-num" style="background: var(--red); color: #fff;">1</div>
+          <div class="step-content">
+            <div class="step-title" style="color: var(--red);">Chi non risponde subito, perde</div>
+            <p>Quando qualcuno si informa su una palestra, di solito scrive a più posti. Chi risponde prima vince. Se il tuo staff è occupato, quella persona va altrove.</p>
+          </div>
+        </div>
+        <div class="step" style="border-color: #3a1515; background: var(--red-bg);">
+          <div class="step-num" style="background: var(--red); color: #fff;">2</div>
+          <div class="step-content">
+            <div class="step-title" style="color: var(--red);">Gli abbonamenti scadono in silenzio</div>
+            <p>Scadenze abbonamento, certificati medici, prove non convertite. Ogni promemoria mancato è un rinnovo che non arriva e un cliente che se ne va senza dire niente.</p>
+          </div>
+        </div>
+        <div class="step" style="border-color: #3a1515; background: var(--red-bg);">
+          <div class="step-num" style="background: var(--red); color: #fff;">3</div>
+          <div class="step-content">
+            <div class="step-title" style="color: var(--red);">Lo staff non può fare tutto</div>
+            <p>La reception accoglie, risponde al telefono, gestisce gli ingressi. Seguire ogni messaggio WhatsApp e ogni richiesta dal sito è impossibile senza aiuto.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: SENZA VS CON -->
+  <div class="slide" id="s6">
+    <div class="slide-inner">
+      <h2 class="animate" style="margin-bottom: 32px;">La differenza è <span class="green">immediata</span></h2>
+      <div class="two-col animate">
+        <div class="card red-border">
+          <div class="tag red" style="margin-bottom: 20px;">✗ &nbsp;Senza SuperAgent</div>
+          <ul class="crosslist">
+            <li>Lead fuori orario senza risposta</li>
+            <li>Rinnovi dimenticati, clienti persi</li>
+            <li>Staff sovraccarico di messaggi</li>
+            <li>Nessuna comunicazione proattiva</li>
+          </ul>
+        </div>
+        <div class="card green-border">
+          <div class="tag" style="margin-bottom: 20px;">✓ &nbsp;Con SuperAgent</div>
+          <ul class="checklist">
+            <li>Risponde in secondi, h24 tutti i giorni</li>
+            <li>Reminder automatici prima delle scadenze</li>
+            <li>Lo staff si concentra su chi è in palestra</li>
+            <li>Campagne WhatsApp a tutti i tuoi contatti</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: LA SOLUZIONE -->
+  <div class="slide" id="s7">
+    <div class="slide-inner">
+      <div class="section-label animate">La soluzione</div>
+      <h1 class="animate">Fatto su misura<br><span class="green">per il fitness.</span></h1>
+      <p class="lead animate" style="max-width: 660px; text-align: center;">
+        SuperAgent.fit non è uno strumento generico adattato al fitness — è nato per questo settore. Sa cosa significa gestire abbonamenti, certificati medici, prove gratuite e rinnovi. Parla come parla chi lavora in palestra, non come un bot.
+      </p>
+      <div class="card green-border animate" style="margin-top: 36px; max-width: 540px; text-align: center;">
+        <h3 style="color: var(--green); margin-bottom: 6px;">Quattro strumenti in uno. Tutto connesso.</h3>
+        <p style="font-size:14px;">Copre tutta la relazione con i tuoi clienti — da quando si informano per la prima volta a quando rinnovano.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: 5 STEP -->
+  <div class="slide" id="s8">
+    <div class="slide-inner left" style="max-width: 800px;">
+      <div class="section-label animate">Come funziona</div>
+      <h2 class="animate" style="margin-bottom: 28px;">5 step <span class="green">automatici</span></h2>
+      <div class="steps animate">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Qualcuno scrive</div>
+            <p>Su WhatsApp o sulla chat del sito, in qualsiasi orario</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Risponde subito</div>
+            <p>In pochi secondi, con le info sul tuo centro</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Capisce cosa vuole</div>
+            <p>Raccoglie esigenze e risponde a ogni domanda</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">Propone il passo successivo</div>
+            <p>Prenota una visita, attiva una prova o vende l'abbonamento</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <div class="step-title">Continua a seguirlo</div>
+            <p>Reminder, follow-up e rinnovi — tutto senza intervento umano</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: I 4 STRUMENTI overview -->
+  <div class="slide" id="s9">
+    <div class="slide-inner">
+      <div class="section-label animate">Cosa fa concretamente</div>
+      <h2 class="animate" style="margin-bottom: 36px;">Quattro strumenti in uno.<br><span class="green">Tutto connesso.</span></h2>
+      <div class="tools-grid animate">
+        <div class="tool-card">
+          <div class="tool-icon">🤖</div>
+          <h3>Assistente AI sempre attivo</h3>
+          <p style="font-size:13px; margin-top:8px;">Risponde h24 su WhatsApp e web chat, prenota e vende direttamente in chat.</p>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon">⚡</div>
+          <h3>Messaggi automatici al momento giusto</h3>
+          <p style="font-size:13px; margin-top:8px;">Scadenze, rinnovi, follow-up. Tu imposti le regole una volta sola.</p>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon">📩</div>
+          <h3>Newsletter WhatsApp al tuo ritmo</h3>
+          <p style="font-size:13px; margin-top:8px;">Messaggi massivi via API ufficiale. 98% letti, contro il 20% delle email.</p>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon">🗃️</div>
+          <h3>Mini CRM integrato</h3>
+          <p style="font-size:13px; margin-top:8px;">Ogni contatto ha la sua scheda, connessa direttamente all'agente.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: ASSISTENTE AI -->
+  <div class="slide" id="s10">
+    <div class="slide-inner left" style="max-width: 900px;">
+      <div class="tag animate">Strumento 1</div>
+      <h2 class="animate">Assistente AI<br><span class="green">sempre attivo</span></h2>
+      <p class="animate" style="margin-bottom: 28px;">Risponde a chi scrive su WhatsApp o sul sito — di giorno, di sera, nel weekend. Conosce il tuo centro, risponde alle domande e porta la persona al passo successivo.</p>
+      <ul class="checklist animate">
+        <li>Risponde h24 su WhatsApp e web chat</li>
+        <li>Prenota visite, appuntamenti in sede e chiamate telefoniche</li>
+        <li>Si integra con Google Calendar, Outlook e Apple Calendar per gestire gli slot in tempo reale</li>
+        <li>Attiva prove e vende abbonamenti direttamente in chat</li>
+        <li>Risponde come se fosse un membro del tuo staff</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: MESSAGGI AUTOMATICI -->
+  <div class="slide" id="s11">
+    <div class="slide-inner left" style="max-width: 900px;">
+      <div class="tag animate">Strumento 2</div>
+      <h2 class="animate">Messaggi automatici<br><span class="green">al momento giusto</span></h2>
+      <p class="animate" style="margin-bottom: 28px;">Non devi ricordarti di niente. SuperAgent.fit invia messaggi automatici quando succede qualcosa di importante — scadenze, rinnovi, follow-up. Tu imposti le regole una volta sola.</p>
+      <ul class="checklist animate">
+        <li>Avviso automatico prima che scada l'abbonamento</li>
+        <li>Reminder certificato medico in scadenza</li>
+        <li>Follow-up automatico su chi ha fatto una prova e non si è ancora iscritto</li>
+        <li>Promemoria per appuntamenti e prenotazioni</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: NEWSLETTER WHATSAPP -->
+  <div class="slide" id="s12">
+    <div class="slide-inner left" style="max-width: 900px;">
+      <div class="tag animate">Strumento 3</div>
+      <h2 class="animate">Newsletter WhatsApp<br><span class="green">al tuo ritmo</span></h2>
+      <p class="animate" style="margin-bottom: 28px;">Invia messaggi a tutti i tuoi contatti — o solo a un gruppo — in modo ufficiale e senza rischiare blocchi. Promozioni, eventi, nuove attività: WhatsApp ha un tasso di lettura che le email non raggiungeranno mai.</p>
+      <ul class="checklist animate">
+        <li>Invii massivi tramite API ufficiale WhatsApp — nessun rischio blocco</li>
+        <li>Messaggi personalizzati con nome del cliente</li>
+        <li>Segmentazione per gruppi: soci attivi, scaduti, nuovi contatti</li>
+        <li>98% di messaggi letti — contro il 20% delle email</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 13: MINI CRM -->
+  <div class="slide" id="s13">
+    <div class="slide-inner left" style="max-width: 900px;">
+      <div class="tag animate">Strumento 4</div>
+      <h2 class="animate">Mini CRM<br><span class="green">integrato</span></h2>
+      <p class="animate" style="margin-bottom: 28px;">Ogni contatto ha la sua scheda. Puoi salvare tutte le informazioni che ti servono, aggiungere note con data per ricordare ogni interazione, e tenere traccia delle scadenze — abbonamento, certificato, follow-up. Tutto in un posto solo, connesso direttamente all'agente.</p>
+      <ul class="checklist animate">
+        <li>Campi anagrafica illimitati — configurabili su misura per il tuo centro</li>
+        <li>Note con timestamp — tieni traccia di ogni conversazione e promessa</li>
+        <li>Date di scadenza per abbonamenti, certificati e promemoria</li>
+        <li>Il bot legge i dati del CRM e si comporta di conseguenza</li>
+      </ul>
+      <div class="card green-border animate" style="margin-top: 24px; padding: 16px 20px; max-width: 600px;">
+        <p style="font-size: 13px;"><strong style="color: var(--green);">🔒 API ufficiali WhatsApp:</strong> SuperAgent.fit usa le API di Meta. Il tuo numero è al sicuro, puoi inviare a migliaia di contatti senza rischio ban.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 14: CANALI -->
+  <div class="slide" id="s14">
+    <div class="slide-inner">
+      <div class="section-label animate">Collegalo ovunque hai traffico</div>
+      <h2 class="animate" style="margin-bottom: 36px;">Ogni canale diventa<br><span class="green">una conversazione che converte</span></h2>
+      <div class="channels-grid animate">
+        <div class="channel-box" style="border-color: #1a4a2e;">
+          <span class="ch-icon">💬</span>WhatsApp
+        </div>
+        <div class="channel-box" style="border-color: #1a2e4a;">
+          <span class="ch-icon">🌐</span>Web Chat
+        </div>
+        <div class="channel-box" style="border-color: #4a1a3a;">
+          <span class="ch-icon">📸</span>Instagram
+        </div>
+        <div class="channel-box" style="border-color: #2a1a4a;">
+          <span class="ch-icon">📣</span>Meta Ads
+        </div>
+        <div class="channel-box" style="border-color: #3a2a1a; grid-column: span 2;">
+          <span class="ch-icon">🔍</span>Google
+        </div>
+      </div>
+      <p class="animate" style="margin-top: 24px; text-align: center; font-size: 14px;">→ Chiunque clicca entra in una conversazione guidata dall'AI che informa, qualifica e converte</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 15: SETUP 48 ORE -->
+  <div class="slide" id="s15">
+    <div class="slide-inner left" style="max-width: 800px;">
+      <div class="section-label animate">Come funziona il setup</div>
+      <h1 class="animate">Pronto in <span class="green">48 ore.</span><br>Ci pensiamo noi.</h1>
+      <p class="animate" style="margin-bottom: 32px;">Non devi sapere niente di tecnologia. Il nostro team si occupa di tutto: dalla configurazione al primo giorno in cui il SuperAgent risponde per te.</p>
+      <div class="ob-steps animate">
+        <div class="ob-step">
+          <div class="ob-num">01</div>
+          <div class="ob-body">
+            <h3>Colleghiamo il tuo WhatsApp</h3>
+            <p>Usiamo il tuo numero esistente. Nessun cambio, nessun rischio. Configuriamo tutto sul sistema ufficiale di Meta.</p>
+            <div class="badge">✓ &nbsp; API ufficiale WhatsApp Business · Nessun rischio ban</div>
+          </div>
+        </div>
+        <div class="ob-step">
+          <div class="ob-num">02</div>
+          <div class="ob-body">
+            <h3>Insegniamo al SuperAgent tutto sul tuo centro</h3>
+            <p>Gli spieghiamo i tuoi orari, prezzi, attività e il tuo modo di parlare. Da quel momento risponde come se lo avessi istruito tu personalmente.</p>
+            <div class="badge">📅 &nbsp; Integrazione Google Calendar · Outlook · Apple Calendar</div>
+          </div>
+        </div>
+        <div class="ob-step">
+          <div class="ob-num">03</div>
+          <div class="ob-body">
+            <h3>Si parte. Con noi sempre vicini.</h3>
+            <p>Mostriamo al tuo team come usare la piattaforma. Poi siete autonomi — ma se avete bisogno, siamo sempre raggiungibili.</p>
+            <div class="badge">⚡ &nbsp; Live in 48 ore · Supporto continuo incluso</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 16: CTA FINALE -->
+  <div class="slide" id="s16">
+    <div class="slide-inner" style="background: var(--green-card); border-radius: 24px; padding: 64px; border: 1px solid #1a4a2e; max-width: 860px;">
+      <div class="section-label animate">Inizia oggi</div>
+      <h1 class="animate" style="font-size: clamp(36px, 4.5vw, 64px);">La prossima persona che si informa sul tuo centro<br>merita una <span class="green">risposta.</span></h1>
+      <p class="lead animate" style="text-align: center; margin: 20px 0 36px;">Prenota una chiamata gratuita di 20 minuti. Ti mostriamo come funzionerebbe per il tuo centro, senza impegno.</p>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;" class="animate">
+        <a class="cta-btn" href="#">Prenota una Demo →</a>
+        <a class="cta-btn outline" href="#">💬 &nbsp; Provalo su WhatsApp</a>
+      </div>
+      <p class="animate" style="margin-top: 28px; font-size: 13px; color: #555; text-align: center;">Setup incluso · Supporto in italiano · Nessun contratto annuale obbligatorio</p>
+    </div>
+  </div>
+
+</div><!-- /slides-wrapper -->
+
+<!-- NAV -->
+<div class="nav">
+  <button id="btnPrev" onclick="changeSlide(-1)">&#8592;</button>
+  <span class="counter" id="counter">1 / 16</span>
+  <button id="btnNext" onclick="changeSlide(1)">&#8594;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function updateUI() {
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('slideNum').textContent =
+      String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+    document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+    document.getElementById('btnPrev').style.opacity = current === 0 ? '0.3' : '1';
+    document.getElementById('btnNext').style.opacity = current === total - 1 ? '0.3' : '1';
+  }
+
+  function changeSlide(dir) {
+    const next = current + dir;
+    if (next < 0 || next >= total) return;
+
+    slides[current].classList.add('exit');
+    slides[current].classList.remove('active');
+
+    setTimeout(() => {
+      slides[current].classList.remove('exit');
+      current = next;
+      slides[current].classList.add('active');
+      updateUI();
+    }, 200);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  });
+
+  // Swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1);
+  });
+
+  updateUI();
+</script>
+</body>
+</html>
